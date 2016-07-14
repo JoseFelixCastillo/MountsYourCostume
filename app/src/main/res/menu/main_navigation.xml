@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item1"
+            android:icon="@android:drawable/star_big_off"
+            android:title="Favourites"
+            android:checked="true"/>
+
+        <item
+            android:id="@+id/item2"
+            android:icon="@android:drawable/ic_input_add"
+            android:title="Create costume"/>
+
+        <item
+            android:id="@+id/item3"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="Search costume"/>
+    </group>
+
+</menu>
