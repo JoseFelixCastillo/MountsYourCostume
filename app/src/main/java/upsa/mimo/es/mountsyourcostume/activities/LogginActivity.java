@@ -2,12 +2,10 @@ package upsa.mimo.es.mountsyourcostume.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -18,12 +16,10 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterAuthException;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
@@ -32,11 +28,14 @@ import com.twitter.sdk.android.core.services.AccountService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.fabric.sdk.android.Fabric;
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 
 public class LogginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+    private static final String TAG = LogginActivity.class.getSimpleName();
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "LKxwiScIKLCioDgmqogkCRJAu";
@@ -53,17 +52,31 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
 
     private static final int RC_GOOGLE_SIGN_IN = 9001;
     private ProgressDialog mProgressDialog;
-    private SignInButton buttonGoogleSignIn;
+   // private SignInButton buttonGoogleSignIn;
 
     //For google plus
     private GoogleApiClient googleApiClient;
     private GoogleSignInAccount account;
 
     //For twitter
-    private TwitterLoginButton loginButton;
+  //  private TwitterLoginButton loginButton;
 
     @BindView(R.id.container_activity_lggin)
     ViewGroup container;
+
+    @OnClick(R.id.button_google_signin)
+    void signInGoogle2(){
+        Log.d(TAG,"pulsado boton google");
+        Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        startActivityForResult(intent, RC_GOOGLE_SIGN_IN);
+    }
+
+    @BindView(R.id.button_google_signin)
+    SignInButton buttonGoogleSignIn;
+
+    @BindView(R.id.twitter_login_button)
+    TwitterLoginButton buttonTwitterLogin;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,33 +94,15 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
     public void onStart() {
         super.onStart();
 
+        Log.d(TAG,"LLEGAMOS AL ONSTART");
         showProgressDialog();
         checkSignInTwitter();
 
         checkSignInGoogle();
     }
 
-
-    private void loadGoogleButton(){
-        buttonGoogleSignIn = (SignInButton) findViewById(R.id.button_google_signin);
-        buttonGoogleSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signInGoogle();
-            }
-        });
-
-    }
-
-    private void signInGoogle(){
-      //  Log.d("LOGGIN","logeado con google");
-        Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        startActivityForResult(intent, RC_GOOGLE_SIGN_IN);
-    }
-
     private void initGooglePlus(){
-        loadGoogleButton();
-
+     //   loadGoogleButton();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -124,7 +119,8 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
         //Mostrar dialog con que ha fallado?¿?
-        Log.d("LOGGIN","Error en connection failed" + connectionResult.getErrorMessage());
+        hideProgressDialog();
+        Log.d(TAG,"Error en connection failed" + connectionResult.getErrorMessage());
         if(connectionResult.getErrorMessage()!=null) {
             MyApplication.showMessageInSnackBar(container, connectionResult.getErrorMessage());
         }
@@ -134,27 +130,28 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        loginButton.onActivityResult(requestCode, resultCode, data);
+        buttonTwitterLogin.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == RC_GOOGLE_SIGN_IN){
             GoogleSignInResult signInResultFromIntent = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            checkSignInResult(signInResultFromIntent);
+            checkGoogleSignInResult(signInResultFromIntent);
         }
 
     }
 
-    private void checkSignInResult(GoogleSignInResult signInResult){
+    private void checkGoogleSignInResult(GoogleSignInResult signInResult){
 
+        Log.d(TAG, "entramos a checkin google");
         if(signInResult.isSuccess()){
+            Log.d(TAG, "entramos a checkin google2");
             account = signInResult.getSignInAccount();
             goToMainActivityWithGooglePlus();
         }
-        //hideProgressDialog();
+        else{
+            hideProgressDialog();
+        }
     }
 
-    /**
-     * El botón se puede customizar, tanto en tamaños como en colores y estilos.
-     */
     private void styleGooglePlusButton(GoogleSignInOptions gso) {
         buttonGoogleSignIn.setSize(SignInButton.SIZE_STANDARD);
         buttonGoogleSignIn.setScopes(gso.getScopeArray());
@@ -173,32 +170,16 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
             Log.d("PHOTO", account.getPhotoUrl().toString());
             profileIntent.putExtra(LOGGIN_URL_IMAGE, account.getPhotoUrl().toString());
         }
+        Log.d(TAG, "entramos a vamos al activity main");
         profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_GOGGLEPLUS);
         startActivity(profileIntent);
+        hideProgressDialog();
         finish();
     }
-
-    //For progress dialog
-    private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage("loading");
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
-        }
-    }
-
     //For twitter
     private void initTwitter(){
-        loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
-        loginButton.setCallback(new Callback<TwitterSession>() {
+     //   loginTwitterButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
+        buttonTwitterLogin.setCallback(new Callback<TwitterSession>() {
 
             @Override
             public void success(Result<TwitterSession> result) {
@@ -242,13 +223,13 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
 
                 profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_TWITTER);
                 startActivity(profileIntent);
-           //     hideProgressDialog();
+                hideProgressDialog();
                 finish();
             }
 
             @Override
             public void failure(TwitterException exception) {
-              //  hideProgressDialog();
+                hideProgressDialog();
                 if(!exception.getMessage().contains("request was canceled")){
                     Log.d("LOGGIN","Error en twitter wiht Twitter");
                     MyApplication.showMessageInSnackBar(container,exception.getMessage());
@@ -265,7 +246,7 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
             goToMainActivityWithTwitter(session);
         }
         else{
-          //  hideProgressDialog();
+            hideProgressDialog();
         }
     }
 
@@ -274,16 +255,35 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         OptionalPendingResult<GoogleSignInResult> optPenRes = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
         if (optPenRes.isDone()) {
             GoogleSignInResult result = optPenRes.get();
-            checkSignInResult(result);
+            checkGoogleSignInResult(result);
         } else {
-//            showProgressDialog();
+           // showProgressDialog();
             optPenRes.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
-                    //         hideProgressDialog();
-                    checkSignInResult(googleSignInResult);
+                 //   hideProgressDialog();
+                    checkGoogleSignInResult(googleSignInResult);
                 }
             });
+        }
+    }
+
+    //For progress dialog
+    private void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("loading");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        Log.d(TAG, "enseño dialog");
+        mProgressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            Log.d(TAG, "escondo DIalog");
+            mProgressDialog.dismiss();
         }
     }
 }

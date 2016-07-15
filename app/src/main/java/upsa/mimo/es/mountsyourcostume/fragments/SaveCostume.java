@@ -2,11 +2,9 @@ package upsa.mimo.es.mountsyourcostume.fragments;
 
 
 import android.Manifest;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,11 +15,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,24 +25,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
-
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.helpers.CostumeDBHelper;
 import upsa.mimo.es.mountsyourcostume.model.CostumeSQLiteOpenHelper;
@@ -54,13 +46,8 @@ import upsa.mimo.es.mountsyourcostume.model.CostumeSQLiteOpenHelper;
 public class SaveCostume extends Fragment {
 
     private static final int CODE_PERMISSION_CAMERA = 80;
-    private final String TAG = "SAVE_COSTUME";
 
-    private ImageView imageViewPhoto;
-    private EditText editTextName;
-    private EditText editTextMaterials;
-    private EditText editTextSteps;
-    private EditText editTextPrize;
+    private final String TAG = "SAVE_COSTUME";
 
     //Fields
     private String name;
@@ -69,17 +56,65 @@ public class SaveCostume extends Fragment {
     private String steps;
     private int prize;
 
-
     SQLiteDatabase db;
 
     //For photo
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private File actuallyPhotoFile;
-    private ViewGroup container;
 
+    //  private ViewGroup container;
     //For savedinstance
     private Bitmap photoBitmap;
+
+    private File actuallyPhotoFile;
+    @BindView(R.id.save_costume_container)
+    ViewGroup container;
+    //   private EditText editTextSteps;
+    @BindView(R.id.edit_text_prize)
+    EditText editTextPrize;
+    @BindView(R.id.image_view_costume)
+    ImageView imageViewPhoto;
+    //  private ImageView imageViewPhoto;
+    @BindView(R.id.edit_text_name)
+    EditText editTextName;
+    //  private EditText editTextName;
+    @BindView(R.id.edit_text_materials)
+    EditText editTextMaterials;
+    //  private EditText editTextMaterials;
+    @BindView(R.id.edit_text_steps)
+    EditText editTextSteps;
+
+    @BindView(R.id.spinner)
+    Spinner spinner;
+
+   /* @OnClick(R.id.button_take_photo_camera)
+    void ButtonTakePhotoCamera() {
+        if (checkPermissionCamera()) {
+            doPhotoWithCamera();
+        }
+    }
+
+    @OnClick(R.id.button_take_photo_album)
+    void ButtonTakePhotoAlbum(){
+        chooseGalleryImage();
+    }*/
+
+    @OnClick(R.id.floating_button_save_favourites)
+    void FloatingSaveFavourites(){
+        saveInFavourites();
+    }
+
+    @OnClick(R.id.floating_button_save_cloud)
+    void FloatingSaveCloud(){
+        saveInCloud();
+    }
+
+    @OnClick(R.id.image_view_costume)
+    void ImageViewCostume(){
+        createDialogForPhoto();
+    }
+
+   // private EditText editTextPrize;
 
 
     public SaveCostume() {
@@ -106,7 +141,9 @@ public class SaveCostume extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_save_costume, container, false);
+        View view = inflater.inflate(R.layout.fragment_save_costume, container, false);
+        ButterKnife.bind(this,view);
+        return view;
 
     }
 
@@ -114,8 +151,8 @@ public class SaveCostume extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(view!=null){
-            loadUI();
-            setSpinner();
+        //    loadUI();
+            initSpinner();
         }
     }
 
@@ -126,7 +163,6 @@ public class SaveCostume extends Fragment {
         if(getView()!=null){
 
         }
-
         if(savedInstanceState!=null){
             if(savedInstanceState.getParcelable("photoBitmap")!=null){
                 imageViewPhoto.setImageBitmap((Bitmap) savedInstanceState.getParcelable("photoBitmap"));
@@ -154,43 +190,7 @@ public class SaveCostume extends Fragment {
 
     }
 
-    private void loadUI(){
-
-
-        Button buttonCamera = (Button) getView().findViewById(R.id.button_take_photo_camera);
-        buttonCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(checkPermissionCamera()) {
-                    doPhotoWithCamera();
-                }
-            }
-        });
-
-        Button buttonAlbum = (Button) getView().findViewById(R.id.button_take_photo_album);
-        buttonAlbum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseGalleryImage();
-            }
-        });
-
-        Button buttonSave = (Button) getView().findViewById(R.id.button_save_favourites);
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveInSQLite();
-            }
-        });
-
-        Button buttonSaveCloud = (Button) getView().findViewById(R.id.button_save_cloud);
-        buttonSaveCloud.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveInCloud();
-            }
-        });
-
+ /*   private void loadUI(){
 
         editTextName = (EditText) getView().findViewById(R.id.edit_text_name);
         editTextMaterials = (EditText) getView().findViewById(R.id.edit_text_materials);
@@ -206,10 +206,11 @@ public class SaveCostume extends Fragment {
 
             }
         });
-    }
+    }*/
+
     //For spinner
-    private void setSpinner(){
-        Spinner spinner = (Spinner) getView().findViewById(R.id.spinner);
+    private void initSpinner(){
+      //  Spinner spinner = (Spinner) getView().findViewById(R.id.spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.categorys, android.R.layout.simple_spinner_item);
@@ -321,7 +322,7 @@ public class SaveCostume extends Fragment {
                 setPicToImageView(imageBitmap);
 
             } else if (resultCode == getActivity().RESULT_CANCELED) {
-                Log.d(TAG, "Cancelado en onActivityResult de capture image  " + data.getData());
+                Log.d(TAG, "Cancelado en onActivityResult de capture image  ");
             } else {
                 // Image capture failed, advise user
                 Log.d(TAG, "Algo raro en onActivityResult de capture image");
@@ -452,7 +453,7 @@ public class SaveCostume extends Fragment {
 
     }
 
-    private void saveInSQLite(){
+    private void saveInFavourites(){
 //Ver tambien categoria
 
         if(getFields()&&category!=null){
@@ -558,4 +559,9 @@ public class SaveCostume extends Fragment {
         return result;
 
     }*/
+
+    private void createDialogForPhoto(){
+        Log.d(TAG,"Llego al dialogforphoto");
+
+    }
 }

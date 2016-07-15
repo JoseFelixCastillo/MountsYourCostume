@@ -2,21 +2,14 @@ package upsa.mimo.es.mountsyourcostume.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-
-
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -37,10 +30,8 @@ import com.twitter.sdk.android.Twitter;
 
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.fragments.FavouriteCostume;
-import upsa.mimo.es.mountsyourcostume.fragments.MainFragment;
 import upsa.mimo.es.mountsyourcostume.fragments.SaveCostume;
 import upsa.mimo.es.mountsyourcostume.fragments.SearchCostume;
-import upsa.mimo.es.mountsyourcostume.helpers.Pages;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -83,13 +74,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         container = (ViewGroup) findViewById(R.id.container);
         drawer = (DrawerLayout) findViewById(R.id.drawer);
-        setListenerToDrawer(drawer);
+     //   setListenerToDrawer(drawer);
 
         loadToolBar();
 
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        Log.d(TAG, "navigation creado");
+
         if(navigationView!=null) {
             navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -134,13 +125,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         String url_image = intent.getStringExtra(LogginActivity.LOGGIN_URL_IMAGE);
         this.flagLoggin = intent.getIntExtra(LogginActivity.FLAG_LOGGIN,0);
 
-       if(name!=null){
-           Log.d(TAG, name);
-           textViewNavigationHeaderName.setText(name);
-       }
-      //  if(email!=null){
-      //      textViewNavigationHeaderEmail.setText(email);
-      //  }
+        if(name!=null){
+            Log.d(TAG, name);
+            textViewNavigationHeaderName.setText(name);
+        }
+        //  if(email!=null){
+        //      textViewNavigationHeaderEmail.setText(email);
+        //  }
         if(url_image!=null){
             Log.d(TAG,url_image);
             setupImageProfile(url_image);
@@ -291,14 +282,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+/*        if(drawer.isDrawerOpen(GravityCompat.START)){
             Log.d(TAG,"cierro drawer");
-            drawer.closeDrawers();
-            outState.putBoolean(IS_DRAWER,true);
+          //  drawer.closeDrawers();
+         //   outState.putBoolean(IS_DRAWER,true);
         }
         else{
-            outState.putBoolean(IS_DRAWER,false);
-        }
+        //    outState.putBoolean(IS_DRAWER,false);
+        }*/
 
         outState.putString(KEY_TITLE,title);
 
@@ -310,11 +301,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             drawer.openDrawer(GravityCompat.START);
             loadNavigationHeaderWithIntent(getIntent());
         }*/
-        Log.d(TAG,"onRestore");
+        Log.d(TAG,"onRestore1");
         super.onRestoreInstanceState(savedInstanceState);
         if(savedInstanceState!=null){
 
         }
+/*        if(drawer.isDrawerOpen(GravityCompat.START)){
+            Log.d(TAG,"onRestore2");
+            loadNavigationHeaderWithIntent(getIntent());
+        }*/
 
     }
 
@@ -322,24 +317,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-               // Log.d(TAG, "llego al onDrawerSlide");
+                Log.d(TAG, "llego al onDrawerSlide");
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
 
-             //   Log.d(TAG, "llego al onDrawerOpened");
+                Log.d(TAG, "llego al onDrawerOpened");
                 loadNavigationHeaderWithIntent(getIntent());
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-              //  Log.d(TAG, "llego al onDrawerClosed");
+               Log.d(TAG, "llego al onDrawerClosed");
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-             //   Log.d(TAG, "llego al onDrawerStateChanged");
+                Log.d(TAG, "llego al onDrawerStateChanged");
             }
         });
     }
