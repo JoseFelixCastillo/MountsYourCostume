@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,6 +45,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import upsa.mimo.es.mountsyourcostume.R;
+import upsa.mimo.es.mountsyourcostume.dialogs.DialogChooseOptionCamera;
+import upsa.mimo.es.mountsyourcostume.events.MessageOptionCameraEvent;
 import upsa.mimo.es.mountsyourcostume.helpers.CostumeDBHelper;
 import upsa.mimo.es.mountsyourcostume.model.CostumeSQLiteOpenHelper;
 
@@ -86,18 +93,6 @@ public class SaveCostume extends Fragment {
 
     @BindView(R.id.spinner)
     Spinner spinner;
-
-   /* @OnClick(R.id.button_take_photo_camera)
-    void ButtonTakePhotoCamera() {
-        if (checkPermissionCamera()) {
-            doPhotoWithCamera();
-        }
-    }
-
-    @OnClick(R.id.button_take_photo_album)
-    void ButtonTakePhotoAlbum(){
-        chooseGalleryImage();
-    }*/
 
     @OnClick(R.id.floating_button_save_favourites)
     void FloatingSaveFavourites(){
@@ -170,6 +165,17 @@ public class SaveCostume extends Fragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -561,7 +567,25 @@ public class SaveCostume extends Fragment {
     }*/
 
     private void createDialogForPhoto(){
+
+        DialogChooseOptionCamera dialogChooseOptionCamera = DialogChooseOptionCamera.newInstance();
+        FragmentManager fm = getChildFragmentManager();
+        dialogChooseOptionCamera.show(fm,DialogChooseOptionCamera.TAG);
         Log.d(TAG,"Llego al dialogforphoto");
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageOptionCameraEvent event) {
+        String[] stringArray = getResources().getStringArray(R.array.photo_options);
+        if(event.getMessage().contains(stringArray[0])){
+            doPhotoWithCamera();
+
+        }
+        else if(event.getMessage().contains(stringArray[1])){
+            chooseGalleryImage();
+        }
+    }
+
+
 }

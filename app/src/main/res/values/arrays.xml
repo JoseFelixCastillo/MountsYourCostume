@@ -7,5 +7,10 @@
         <item>animales</item>
     </string-array>
 
+    <string-array name="photo_options">
+        <item>Camara</item>
+        <item>Galeria</item>
+    </string-array>
+
 
 </resources>
