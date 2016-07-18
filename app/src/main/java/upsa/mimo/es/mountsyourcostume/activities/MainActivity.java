@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         initGooglePlus();
         loadUI();
 
-        setFragmentAndTitle(savedInstanceState);
+        initFragmentAndTitle(savedInstanceState);
 
     }
 
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    private void setFragmentAndTitle(Bundle savedInstanceState){
+    private void initFragmentAndTitle(Bundle savedInstanceState){
         //MainFragment mainFragment = MainFragment.newInstance();
         if(savedInstanceState==null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

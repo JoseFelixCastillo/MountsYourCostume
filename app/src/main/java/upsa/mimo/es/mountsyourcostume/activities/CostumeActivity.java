@@ -2,18 +2,17 @@ package upsa.mimo.es.mountsyourcostume.activities;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.view.MenuItem;
@@ -22,30 +21,53 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.adapters.TransitionAdapter;
-import upsa.mimo.es.mountsyourcostume.helpers.CostumeDBHelper;
+import upsa.mimo.es.mountsyourcostume.application.MyApplication;
+import upsa.mimo.es.mountsyourcostume.dialogs.DialogConfirmDeleteCostume;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
-import upsa.mimo.es.mountsyourcostume.model.CostumeSQLiteOpenHelper;
 
-public class CostumeActivity extends AppCompatActivity {
+public class CostumeActivity extends AppCompatActivity implements DialogConfirmDeleteCostume.DialogConfirmDeleteCostumeInterface{
 
     public static final String EXTRA_ITEM = "CostumeActivity:extraItem";
 
-    private CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.collapsing_toolbar_activity_costume)
+    CollapsingToolbarLayout collapsingToolbar;
+    //private CollapsingToolbarLayout collapsingToolbar;
 
-    private TextView category;
-    private TextView materials;
-    private TextView steps;
-    private TextView price;
-    private ImageView image;
-    private FloatingActionButton fab;
+    @BindView(R.id.category_activity_costume)
+    TextView category;
+   // private TextView category;
+    @BindView(R.id.materials_activity_costume)
+    TextView materials;
+   // private TextView materials;
+    @BindView(R.id.steps_activity_costume)
+    TextView steps;
+  //  private TextView steps;
+    @BindView(R.id.price_activity_costume)
+    TextView price;
+  //  private TextView price;
+    @BindView(R.id.image_costume)
+    ImageView image;
+ //   private FloatingActionButton fab;
+    @BindView(R.id.coordinator_activity_costume)
+    ViewGroup container;
+    @BindView(R.id.toolbar_activity_costume)
+    Toolbar toolbar;
 
-    private ViewGroup container;
+    //  private ViewGroup container;
+    //   private ImageView image;
+    @BindView(R.id.fab_activity_costume)
+    FloatingActionButton fab;
+    @OnClick(R.id.fab_activity_costume)
+    void eraseCostume(){
+        DialogConfirmDeleteCostume dialog = DialogConfirmDeleteCostume.newInstance();
+        FragmentManager fm = getSupportFragmentManager();
+        dialog.show(fm,DialogConfirmDeleteCostume.TAG);
+    }
 
 
     @Override
@@ -53,10 +75,11 @@ public class CostumeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_costume);
 
-        loadUI();
+        ButterKnife.bind(this);
+        initToolbar();
         enableFullScreen();
 
-        setFields((Costume) getIntent().getParcelableExtra(EXTRA_ITEM));
+        initFields((Costume) getIntent().getParcelableExtra(EXTRA_ITEM));
         //Para el fab ver si es bueno
         delayAnimations();
      //   fab.show();
@@ -127,85 +150,37 @@ public class CostumeActivity extends AppCompatActivity {
             else{
                 finish();
             }
-
         }
-        
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadUI(){
+    private void initToolbar(){
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_costume);
         setSupportActionBar(toolbar);
 
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        container = (ViewGroup) findViewById(R.id.coordinator_activity_costume);
-
-        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_activity_costume);
-
-        category = (TextView) findViewById(R.id.category_activity_costume);
-        materials = (TextView) findViewById(R.id.materials_activity_costume);
-        steps = (TextView) findViewById(R.id.steps_activity_costume);
-        price = (TextView) findViewById(R.id.price_activity_costume);
-        image = (ImageView) findViewById(R.id.image_costume);
-        fab = (FloatingActionButton) findViewById(R.id.fab_activity_costume);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int deletions = deleteCostume(getTitle().toString());
-                if(deletions>0){
-                    Snackbar snackbar = Snackbar.make(container,"Costume eliminado",Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        fab.hide(new FloatingActionButton.OnVisibilityChangedListener() {
-                            @Override public void onHidden(FloatingActionButton fab) {
-                                Intent intent = new Intent(CostumeActivity.this,MainActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                        animateTitleAlpha(true);
-                    }
-                    else{
-                        Intent intent = new Intent(CostumeActivity.this,MainActivity.class);
-                        startActivity(intent);
-
-
-                    }
-                }
-                else{
-                    Snackbar snackbar = Snackbar.make(container,"No se pudo eliminar",Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                }
-
-            }
-        });
-
     }
 
-    private void setFields(Costume costume){
+    private void initFields(Costume costume){
 
         setTitle(costume.getName());
 
         category.setText(costume.getCategory());
         materials.setText(costume.getMaterials());
         steps.setText(costume.getSteps());
-        price.setText(Integer.toString(costume.getPrize()));
+        price.setText(String.format("%d",costume.getPrize()));
+       // price.setText(Integer.toString(costume.getPrize()));
         // Picasso.with(this).load(costume.getUri_image()).into(image);
         image.setImageURI(Uri.parse(costume.getUri_image()));
-
-
-
     }
 
     private int deleteCostume(String name){
 
-        CostumeSQLiteOpenHelper costumeDB = CostumeSQLiteOpenHelper.getInstance(CostumeActivity.this,CostumeSQLiteOpenHelper.DATABASE_NAME,null,CostumeSQLiteOpenHelper.DATABASE_VERSION);
-        SQLiteDatabase db = costumeDB.getWritableDatabase();
-        int deletions = CostumeDBHelper.deleteCostumeByName(db,name);
-        return deletions;
+        return MyApplication.getLocalPersistance().deleteCostume(name);
+
     }
 
     private void setAnimationHide(){
@@ -215,5 +190,37 @@ public class CostumeActivity extends AppCompatActivity {
             }
         });
         animateTitleAlpha(true);
+    }
+
+    private void showDialogConfirmErase(){
+
+    }
+
+    @Override
+    public void confirmDelete() {
+        int deletions = deleteCostume(getTitle().toString());
+        if(deletions>0){
+            Snackbar snackbar = Snackbar.make(container,"Costume eliminado",Snackbar.LENGTH_LONG);
+            snackbar.show();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fab.hide(new FloatingActionButton.OnVisibilityChangedListener() {
+                    @Override public void onHidden(FloatingActionButton fab) {
+                        Intent intent = new Intent(CostumeActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                animateTitleAlpha(true);
+            }
+            else{
+                Intent intent = new Intent(CostumeActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+        else{
+            Snackbar snackbar = Snackbar.make(container,"No se pudo eliminar",Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
     }
 }

@@ -163,9 +163,10 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         if(account.getDisplayName()!=null) {
             profileIntent.putExtra(LOGGIN_NAME, account.getDisplayName());
         }
-     //   if(account.getEmail()!=null) {
+        if(account.getEmail()!=null) {
       //      profileIntent.putExtra(LOGGIN_EMAIL, account.getEmail());
-     //   }
+            Log.d(TAG, "Google email: " + account.getEmail());
+        }
         if(account.getPhotoUrl()!=null) {
             Log.d("PHOTO", account.getPhotoUrl().toString());
             profileIntent.putExtra(LOGGIN_URL_IMAGE, account.getPhotoUrl().toString());
@@ -184,6 +185,7 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
             @Override
             public void success(Result<TwitterSession> result) {
 
+                Log.d(TAG, "initTwitterboton quizas");
                 TwitterSession session = result.data;
                 goToMainActivityWithTwitter(session);
 
@@ -210,17 +212,19 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
                 Intent profileIntent = new Intent(LogginActivity.this, MainActivity.class);
                 String name = result.data.name;
                 String url_image = result.data.profileImageUrl.replace("_normal","_bigger");
-              //  String email = result.data.email;
+                String email = result.data.email;
                 if (name != null) {
                     profileIntent.putExtra(LogginActivity.LOGGIN_NAME, name);
                 }
                 if (url_image != null) {
                     profileIntent.putExtra(LogginActivity.LOGGIN_URL_IMAGE, url_image);
                 }
-             //   if (email != null) {
-             //       profileIntent.putExtra(LogginActivity.LOGGIN_EMAIL, email);
-             //   }
+                if (email != null) {
+                  //  profileIntent.putExtra(LogginActivity.LOGGIN_EMAIL, email);
+                    Log.d(TAG, "Twitter email: " + email);
+                }
 
+                Log.d(TAG, "iniciando con twwiter");
                 profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_TWITTER);
                 startActivity(profileIntent);
                 hideProgressDialog();

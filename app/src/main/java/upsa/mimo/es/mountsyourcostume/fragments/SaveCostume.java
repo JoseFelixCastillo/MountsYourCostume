@@ -45,10 +45,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import upsa.mimo.es.mountsyourcostume.R;
+import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.dialogs.DialogChooseOptionCamera;
 import upsa.mimo.es.mountsyourcostume.events.MessageOptionCameraEvent;
-import upsa.mimo.es.mountsyourcostume.helpers.CostumeDBHelper;
-import upsa.mimo.es.mountsyourcostume.model.CostumeSQLiteOpenHelper;
+import upsa.mimo.es.mountsyourcostume.model.Costume;
 
 public class SaveCostume extends Fragment {
 
@@ -472,10 +472,9 @@ public class SaveCostume extends Fragment {
             if(file!=null) {
                 //setFileToActuallyPhotoFile(file);
 
-                CostumeSQLiteOpenHelper costumeDB = CostumeSQLiteOpenHelper.getInstance(getActivity(), CostumeSQLiteOpenHelper.DATABASE_NAME, null, CostumeSQLiteOpenHelper.DATABASE_VERSION);
+                Costume costume = new Costume(name,category,materials,steps,prize,file.getPath());
+                long rows = MyApplication.getLocalPersistance().saveCostume(costume);
 
-                db = costumeDB.getWritableDatabase();
-                long rows = CostumeDBHelper.insertCostume(db, name, category, materials, steps, prize, file.getPath());
                 if (rows > 0) {
                     Log.d(TAG, "ha habido inserciones");
                     Snackbar snackbar = Snackbar.make(container,"Se guardo correctamente",Snackbar.LENGTH_LONG);
@@ -579,7 +578,9 @@ public class SaveCostume extends Fragment {
     public void onMessageEvent(MessageOptionCameraEvent event) {
         String[] stringArray = getResources().getStringArray(R.array.photo_options);
         if(event.getMessage().contains(stringArray[0])){
-            doPhotoWithCamera();
+            if(checkPermissionCamera()) {
+                doPhotoWithCamera();
+            }
 
         }
         else if(event.getMessage().contains(stringArray[1])){

@@ -1,58 +1,50 @@
 package upsa.mimo.es.mountsyourcostume.helpers;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
 
+import upsa.mimo.es.mountsyourcostume.interfaces.LocalPersistance;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
 import upsa.mimo.es.mountsyourcostume.model.CostumeSQLiteOpenHelper;
 
 /**
  * Created by JoseFelix on 16/05/2016.
  */
-public class CostumeDBHelper {
+public class CostumeDBHelper implements LocalPersistance{
 
     private static final String TAG = "COSTUME_DBHELPER";
 
-    public static long insertCostume(SQLiteDatabase db, String name, String category, String materials, String steps, int prize, String uri_image){
+    private SQLiteDatabase db;
+    private static CostumeDBHelper instance;
 
-        ContentValues newCostume = new ContentValues();
-        newCostume.put(CostumeSQLiteOpenHelper.KEY_NAME, name);
-        newCostume.put(CostumeSQLiteOpenHelper.KEY_CATEGORY, category);
-        newCostume.put(CostumeSQLiteOpenHelper.KEY_MATERIALS, materials);
-        newCostume.put(CostumeSQLiteOpenHelper.KEY_STEPS, steps);
-        newCostume.put(CostumeSQLiteOpenHelper.KEY_PRIZE, prize);
-        newCostume.put(CostumeSQLiteOpenHelper.KEY_URI_IMAGE, uri_image);
+    private CostumeDBHelper(Context context){
+        CostumeSQLiteOpenHelper sqLiteOpenHelper = CostumeSQLiteOpenHelper.getInstance(context,CostumeSQLiteOpenHelper.DATABASE_NAME,
+                null,CostumeSQLiteOpenHelper.DATABASE_VERSION);
 
-        long rows = db.insert(CostumeSQLiteOpenHelper.DATABASE_TABLE, null, newCostume);
-        Log.d(TAG,"rows insertadas: " + rows);
-        return rows;
+        db = sqLiteOpenHelper.getWritableDatabase();
+    }
+
+    public static CostumeDBHelper newInstance(Context context){
+        if(instance==null){
+            instance = new CostumeDBHelper(context);
+        }
+        return instance;
     }
 
     public static void updateCostume(){
 
     }
-    public static int deleteCostumeByName(SQLiteDatabase db, String name){
 
-      //  String where =  CostumeSQLiteOpenHelper.KEY_NAME  + " = ?" ;
-      //  String[] whereArgs = new String[] { name };
-      //  int rows = db.delete(CostumeSQLiteOpenHelper.DATABASE_NAME, where, whereArgs);
-        int rows = db.delete(CostumeSQLiteOpenHelper.DATABASE_TABLE, CostumeSQLiteOpenHelper.KEY_NAME + " = ?", new String[] { name });
-        String string = new String(CostumeSQLiteOpenHelper.DATABASE_TABLE +  CostumeSQLiteOpenHelper.KEY_NAME + " = ?" + new String[] { name });
-        Log.d(TAG,"string eliminadas:  " + string);
-        return rows;
-
-    }
-
-    public static ArrayList<Costume> getCostumes(SQLiteDatabase db){
-
-
-        String[] campos = new String[]{CostumeSQLiteOpenHelper.KEY_NAME, CostumeSQLiteOpenHelper.KEY_CATEGORY, CostumeSQLiteOpenHelper.KEY_MATERIALS,
-                CostumeSQLiteOpenHelper.KEY_STEPS,CostumeSQLiteOpenHelper.KEY_PRIZE,CostumeSQLiteOpenHelper.KEY_URI_IMAGE};
+    @Override
+    public ArrayList<Costume> getCostumes() {
+        String[] campos = new String[]{CostumeSQLiteOpenHelper.KEY_NAME, CostumeSQLiteOpenHelper.KEY_CATEGORY,
+                CostumeSQLiteOpenHelper.KEY_MATERIALS,CostumeSQLiteOpenHelper.KEY_STEPS,CostumeSQLiteOpenHelper.KEY_PRIZE,
+                CostumeSQLiteOpenHelper.KEY_URI_IMAGE};
         Cursor c = db.query(CostumeSQLiteOpenHelper.DATABASE_TABLE, campos, null, null, null, null,
                 null);
 
@@ -77,5 +69,30 @@ public class CostumeDBHelper {
         c.close();
 
         return costumes;
+    }
+
+    @Override
+    public long saveCostume(Costume costume) {
+        ContentValues newCostume = new ContentValues();
+        newCostume.put(CostumeSQLiteOpenHelper.KEY_NAME, costume.getName());
+        newCostume.put(CostumeSQLiteOpenHelper.KEY_CATEGORY, costume.getCategory());
+        newCostume.put(CostumeSQLiteOpenHelper.KEY_MATERIALS, costume.getMaterials());
+        newCostume.put(CostumeSQLiteOpenHelper.KEY_STEPS, costume.getSteps());
+        newCostume.put(CostumeSQLiteOpenHelper.KEY_PRIZE, costume.getPrize());
+        newCostume.put(CostumeSQLiteOpenHelper.KEY_URI_IMAGE, costume.getUri_image());
+
+        long rows = db.insert(CostumeSQLiteOpenHelper.DATABASE_TABLE, null, newCostume);
+        Log.d(TAG,"rows insertadas: " + rows);
+        return rows;
+
+    }
+
+    @Override
+    public int deleteCostume(String name) {
+
+        int rows = db.delete(CostumeSQLiteOpenHelper.DATABASE_TABLE, CostumeSQLiteOpenHelper.KEY_NAME + " = ?", new String[] { name });
+        String string = new String(CostumeSQLiteOpenHelper.DATABASE_TABLE +  CostumeSQLiteOpenHelper.KEY_NAME + " = ?" + new String[] { name });
+        Log.d(TAG,"string eliminadas:  " + string);
+        return rows;
     }
 }

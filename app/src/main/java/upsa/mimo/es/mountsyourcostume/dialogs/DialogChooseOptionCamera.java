@@ -46,6 +46,7 @@ public class DialogChooseOptionCamera extends DialogFragment implements DialogIn
     @Override
     public void onClick(DialogInterface dialog, int which) {
         EventBus.getDefault().post(new MessageOptionCameraEvent(getResources().getStringArray(R.array.photo_options)[which]));
+        dialog.dismiss();
 
     }
 }

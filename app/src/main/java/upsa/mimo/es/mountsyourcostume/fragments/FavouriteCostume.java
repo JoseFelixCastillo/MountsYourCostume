@@ -1,14 +1,12 @@
 package upsa.mimo.es.mountsyourcostume.fragments;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,16 +20,15 @@ import java.util.List;
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.activities.CostumeActivity;
 import upsa.mimo.es.mountsyourcostume.adapters.CostumeAdapter;
-import upsa.mimo.es.mountsyourcostume.helpers.CostumeDBHelper;
+import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
-import upsa.mimo.es.mountsyourcostume.model.CostumeSQLiteOpenHelper;
 
 
 public class FavouriteCostume extends Fragment implements CostumeAdapter.OnItemClickListener{
 
     private final String TAG = "FAVOURITE_COSTUME";
 
-    private SQLiteDatabase db;
+   // private SQLiteDatabase db;
     private RecyclerView recyclerView;
     private LayoutInflater inflater;
     private ViewGroup container;
@@ -99,12 +96,10 @@ public class FavouriteCostume extends Fragment implements CostumeAdapter.OnItemC
     }
 
 
-    private ArrayList<Costume> getCostumesFromSQLite(){
-        CostumeSQLiteOpenHelper costumeDB = CostumeSQLiteOpenHelper.getInstance(getActivity(), CostumeSQLiteOpenHelper.DATABASE_NAME, null, CostumeSQLiteOpenHelper.DATABASE_VERSION);
+    private ArrayList<Costume> getCostumesFromLocalPersistance(){
 
-        db = costumeDB.getReadableDatabase();  //Luego si eso cambiamos el readable por el write
+        ArrayList<Costume> costumes = MyApplication.getLocalPersistance().getCostumes();
 
-        ArrayList<Costume> costumes = CostumeDBHelper.getCostumes(db);
         if(!costumes.isEmpty()) {
             Log.d(TAG, "costume: " + costumes.get(0).getName());
         }
@@ -116,7 +111,7 @@ public class FavouriteCostume extends Fragment implements CostumeAdapter.OnItemC
 
     private void drawList(){
 
-        final List<Costume> costumesFromSQLite = getCostumesFromSQLite();
+        final List<Costume> costumesFromSQLite = getCostumesFromLocalPersistance();
         if(!costumesFromSQLite.isEmpty()) {
             final CostumeAdapter costumeAdapter = new CostumeAdapter(costumesFromSQLite, this, getActivity());
             Log.d(TAG, "pasando a drawlist");
