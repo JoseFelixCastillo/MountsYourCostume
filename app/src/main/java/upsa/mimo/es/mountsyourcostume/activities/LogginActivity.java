@@ -64,15 +64,15 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
     @BindView(R.id.container_activity_lggin)
     ViewGroup container;
 
+    @BindView(R.id.button_google_signin)
+    SignInButton buttonGoogleSignIn;
+
     @OnClick(R.id.button_google_signin)
     void signInGoogle2(){
         Log.d(TAG,"pulsado boton google");
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, RC_GOOGLE_SIGN_IN);
     }
-
-    @BindView(R.id.button_google_signin)
-    SignInButton buttonGoogleSignIn;
 
     @BindView(R.id.twitter_login_button)
     TwitterLoginButton buttonTwitterLogin;
@@ -96,9 +96,10 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
 
         Log.d(TAG,"LLEGAMOS AL ONSTART");
         showProgressDialog();
-        checkSignInTwitter();
+        if(!isSignInTwitter()) {
+            checkSignInGoogle();
+        }
 
-        checkSignInGoogle();
     }
 
     private void initGooglePlus(){
@@ -161,18 +162,22 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
 
         Intent profileIntent = new Intent(this, MainActivity.class);
         if(account.getDisplayName()!=null) {
-            profileIntent.putExtra(LOGGIN_NAME, account.getDisplayName());
+            MyApplication.user.setName(account.getDisplayName());
+           // profileIntent.putExtra(LOGGIN_NAME, account.getDisplayName());
         }
         if(account.getEmail()!=null) {
+            MyApplication.user.setEmail(account.getEmail());
       //      profileIntent.putExtra(LOGGIN_EMAIL, account.getEmail());
             Log.d(TAG, "Google email: " + account.getEmail());
         }
         if(account.getPhotoUrl()!=null) {
             Log.d("PHOTO", account.getPhotoUrl().toString());
-            profileIntent.putExtra(LOGGIN_URL_IMAGE, account.getPhotoUrl().toString());
+            MyApplication.user.setPhotoURL(account.getPhotoUrl().toString());
+          //  profileIntent.putExtra(LOGGIN_URL_IMAGE, account.getPhotoUrl().toString());
         }
         Log.d(TAG, "entramos a vamos al activity main");
-        profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_GOGGLEPLUS);
+        MyApplication.user.setSocialNetwork(LogginActivity.FLAG_GOGGLEPLUS);
+       // profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_GOGGLEPLUS);
         startActivity(profileIntent);
         hideProgressDialog();
         finish();
@@ -187,7 +192,7 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
 
                 Log.d(TAG, "initTwitterboton quizas");
                 TwitterSession session = result.data;
-                goToMainActivityWithTwitter(session);
+                getInfoUserWithTwitter(session);
 
             }
             @Override
@@ -201,34 +206,47 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         });
     }
 
-    private void goToMainActivityWithTwitter(TwitterSession session){
-
+    private void getInfoUserWithTwitter(final TwitterSession session){
        //  showProgressDialog();
         AccountService accountService = Twitter.getApiClient(session).getAccountService();
         accountService.verifyCredentials(true, true, new Callback<User>() {
             @Override
-            public void success(Result<User> result) {
+            public void success(final Result<User> result) {
 
-                Intent profileIntent = new Intent(LogginActivity.this, MainActivity.class);
                 String name = result.data.name;
                 String url_image = result.data.profileImageUrl.replace("_normal","_bigger");
-                String email = result.data.email;
+                //   String email = result.data.email;
                 if (name != null) {
-                    profileIntent.putExtra(LogginActivity.LOGGIN_NAME, name);
+                    MyApplication.user.setName(name);
+                  //  profileIntent.putExtra(LogginActivity.LOGGIN_NAME, name);
                 }
                 if (url_image != null) {
-                    profileIntent.putExtra(LogginActivity.LOGGIN_URL_IMAGE, url_image);
+                    MyApplication.user.setPhotoURL(url_image);
+                 //   profileIntent.putExtra(LogginActivity.LOGGIN_URL_IMAGE, url_image);
                 }
-                if (email != null) {
-                  //  profileIntent.putExtra(LogginActivity.LOGGIN_EMAIL, email);
+                MyApplication.user.setSocialNetwork(LogginActivity.FLAG_TWITTER);
+                goToMainActivityWithTwitter();
+              /*  if (email != null) {
+                    //  profileIntent.putExtra(LogginActivity.LOGGIN_EMAIL, email);
                     Log.d(TAG, "Twitter email: " + email);
-                }
+                }*/
+                /*TwitterAuthClient authClient = new TwitterAuthClient();
+                authClient.requestEmail(session, new Callback<String>() {
+                    @Override
+                    public void success(Result<String> result) {
 
-                Log.d(TAG, "iniciando con twwiter");
-                profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_TWITTER);
-                startActivity(profileIntent);
-                hideProgressDialog();
-                finish();
+                        String email = result.data.toString();
+                        Log.d(TAG, "twitter email: " + email);
+                        MyApplication.user.setEmail(email);
+                        goToMainActivityWithTwitter();
+                    }
+
+                    @Override
+                    public void failure(TwitterException exception) {
+                        Log.d(TAG, "error con email");
+                        goToMainActivityWithTwitter();
+                    }
+                });*/
             }
 
             @Override
@@ -243,14 +261,16 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         });
     }
 
-    private void checkSignInTwitter(){
+    private boolean isSignInTwitter(){
         Twitter.getInstance();
         TwitterSession session = Twitter.getSessionManager().getActiveSession();
         if(session!=null){
-            goToMainActivityWithTwitter(session);
+            getInfoUserWithTwitter(session);
+            return true;
         }
         else{
             hideProgressDialog();
+            return false;
         }
     }
 
@@ -278,6 +298,7 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage("loading");
             mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
         }
 
         Log.d(TAG, "enseño dialog");
@@ -289,5 +310,17 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
             Log.d(TAG, "escondo DIalog");
             mProgressDialog.dismiss();
         }
+    }
+
+    private void goToMainActivityWithTwitter(){
+
+        Intent profileIntent = new Intent(LogginActivity.this, MainActivity.class);
+
+        Log.d(TAG, "iniciando con twitter");
+        profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_TWITTER);
+        profileIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(profileIntent);
+        hideProgressDialog();
+        finish();
     }
 }

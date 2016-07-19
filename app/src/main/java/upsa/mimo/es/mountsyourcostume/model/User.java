@@ -6,6 +6,12 @@ package upsa.mimo.es.mountsyourcostume.model;
 public class User {
     private String name;
     private String photoURL;
+    private String email;
+    private int socialNetwork;
+
+    public User(){
+
+    }
 
     public User(String name, String photoURL){
         this.name = name;
@@ -26,5 +32,21 @@ public class User {
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getSocialNetwork() {
+        return socialNetwork;
+    }
+
+    public void setSocialNetwork(int socialNetwork) {
+        this.socialNetwork = socialNetwork;
     }
 }

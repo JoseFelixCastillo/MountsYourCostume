@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +31,10 @@ import com.google.android.gms.common.api.Status;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.Twitter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import upsa.mimo.es.mountsyourcostume.R;
+import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.fragments.FavouriteCostume;
 import upsa.mimo.es.mountsyourcostume.fragments.SaveCostume;
 import upsa.mimo.es.mountsyourcostume.fragments.SearchCostume;
@@ -39,15 +45,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private int flagLoggin;
 
-    private ViewGroup container;
-    private DrawerLayout drawer;
-
-    //For drawer layout
-   // private ImageView imageViewNavigationHeader;
-    private TextView textViewNavigationHeaderName;
-   // private TextView textViewNavigationHeaderEmail;
-    private ImageView imageViewNavigationHeaderLoggin;
-
     //For login with google+
     private GoogleApiClient googleApiClient;
     private static final String IS_DRAWER = "isDrawer";
@@ -56,6 +53,23 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private String title = "Favourite";
     private static final String KEY_TITLE = "title";
 
+    @BindView(R.id.container)
+    ViewGroup container;
+   // private ViewGroup container;
+
+    @BindView(R.id.drawer)
+    DrawerLayout drawer;
+
+    @BindView(R.id.navigation_view)
+    NavigationView navigationView;
+   // private DrawerLayout drawer;
+    //For drawer layout
+   // private ImageView imageViewNavigationHeader;
+    private TextView textViewNavigationHeaderName;
+    private TextView textViewNavigationHeaderEmail;
+
+    private ImageView imageViewNavigationHeaderLoggin;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
         initGooglePlus();
         loadUI();
 
@@ -71,14 +86,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     private void loadUI(){
-
-        container = (ViewGroup) findViewById(R.id.container);
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
      //   setListenerToDrawer(drawer);
 
         loadToolBar();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+    //    NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         Log.d(TAG, "navigation creado");
 
         if(navigationView!=null) {
@@ -116,22 +128,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         Log.d(TAG,"LLEGOOO al loadNavigationWithIntent");
         textViewNavigationHeaderName = (TextView) findViewById(R.id.text_view_navigation_header_name);
-       // textViewNavigationHeaderEmail = (TextView) findViewById(R.id.text_view_navigation_header_email);
+        textViewNavigationHeaderEmail = (TextView) findViewById(R.id.text_view_navigation_header_email);
 
         imageViewNavigationHeaderLoggin = (ImageView) findViewById(R.id.image_view_social_loggin_navigation_header);
 
-        String name = intent.getStringExtra(LogginActivity.LOGGIN_NAME);
+        String name = MyApplication.user.getName();
+        // String name = intent.getStringExtra(LogginActivity.LOGGIN_NAME);
+        String email = MyApplication.user.getEmail();
        // String email = intent.getStringExtra(LogginActivity.LOGGIN_EMAIL);
-        String url_image = intent.getStringExtra(LogginActivity.LOGGIN_URL_IMAGE);
-        this.flagLoggin = intent.getIntExtra(LogginActivity.FLAG_LOGGIN,0);
+        String url_image = MyApplication.user.getPhotoURL();
+        //  String url_image = intent.getStringExtra(LogginActivity.LOGGIN_URL_IMAGE);
+        this.flagLoggin = MyApplication.user.getSocialNetwork();
+      //  this.flagLoggin = intent.getIntExtra(LogginActivity.FLAG_LOGGIN,0);
 
         if(name!=null){
             Log.d(TAG, name);
             textViewNavigationHeaderName.setText(name);
         }
-        //  if(email!=null){
-        //      textViewNavigationHeaderEmail.setText(email);
-        //  }
+        if(email!=null){
+            textViewNavigationHeaderEmail.setText(email);
+        }
+
         if(url_image!=null){
             Log.d(TAG,url_image);
             setupImageProfile(url_image);
@@ -151,12 +168,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private void loadToolBar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+      //  toolbar.inflateMenu(R.menu.menu_settings);
 
         //Ver
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(new DrawerArrowDrawable(toolbar.getContext()));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_settings,menu);
+        return true;
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -176,6 +200,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             case R.id.item3:
                 fragment = SearchCostume.newInstance();
                 break;
+            case R.id.action_settings:
+                Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+                ActivityCompat.startActivity(MainActivity.this,intent,options.toBundle());
+              //  startActivity(intent);
+                return true;
+              //  getFragmentManager().beginTransaction().
+            case R.id.info_settings:
+                return true;
+
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame,fragment);

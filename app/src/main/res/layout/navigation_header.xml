@@ -25,6 +25,13 @@
         android:layout_alignLeft="@id/image_view_navigation_header"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_view_navigation_header_email"
+        android:layout_below="@id/text_view_navigation_header_name"
+        android:layout_alignLeft="@id/image_view_navigation_header"/>
+
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"

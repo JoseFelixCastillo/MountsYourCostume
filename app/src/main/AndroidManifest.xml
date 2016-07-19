@@ -3,9 +3,9 @@
     package="upsa.mimo.es.mountsyourcostume">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -18,18 +18,24 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:theme="@style/AppTheme.TransparentStatus">
-        </activity>
-        <activity android:name=".activities.CostumeActivity" android:theme="@style/AppTheme.TransparentStatus"/>
+            android:theme="@style/AppTheme.TransparentStatus"></activity>
+        <activity
+            android:name=".activities.CostumeActivity"
+            android:theme="@style/AppTheme.TransparentStatus" />
         <activity android:name=".activities.LogginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.SettingsActivity"
+            android:theme="@style/AppTheme.Settings"/>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b2fe168c109ee0a92c1a1156a5a465c05b75e153" />
+
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.transition.Transition;
 import android.view.MenuItem;
 import android.view.View;
@@ -192,20 +193,18 @@ public class CostumeActivity extends AppCompatActivity implements DialogConfirmD
         animateTitleAlpha(true);
     }
 
-    private void showDialogConfirmErase(){
-
-    }
-
     @Override
     public void confirmDelete() {
         int deletions = deleteCostume(getTitle().toString());
         if(deletions>0){
             Snackbar snackbar = Snackbar.make(container,"Costume eliminado",Snackbar.LENGTH_LONG);
             snackbar.show();
+            final Intent intent = new Intent(CostumeActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setExitTransition(new Explode());
                 fab.hide(new FloatingActionButton.OnVisibilityChangedListener() {
                     @Override public void onHidden(FloatingActionButton fab) {
-                        Intent intent = new Intent(CostumeActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
                         startActivity(intent);
                         finish();
                     }
@@ -213,7 +212,6 @@ public class CostumeActivity extends AppCompatActivity implements DialogConfirmD
                 animateTitleAlpha(true);
             }
             else{
-                Intent intent = new Intent(CostumeActivity.this,MainActivity.class);
                 startActivity(intent);
                 finish();
             }

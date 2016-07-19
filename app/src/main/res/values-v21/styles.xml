@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
         <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
                 <item name="colorPrimary">@color/colorPrimary</item>
                 <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -15,11 +14,24 @@
         <style name="AppTheme.TransparentStatus">
                 <item name="android:windowDrawsSystemBarBackgrounds">true</item>
                 <item name="android:statusBarColor">@android:color/transparent</item>
+                <item name="android:windowEnterTransition">@android:transition/slide_right</item>
+                <item name="android:windowExitTransition">@android:transition/slide_left</item>
+                <item name="android:transitionGroup">true</item>
         </style>
 
+        <style name="AppTheme.Main" parent="AppTheme.TransparentStatus">
+                <item name="android:windowEnterTransition">@transition/custom_slide_right</item>
+                <item name="android:windowExitTransition">@android:transition/slide_left</item>
+        </style>
         <style name="AppTheme.Costume" parent="AppTheme.TransparentStatus">
                 <item name="android:windowEnterTransition">@transition/custom_slide_right</item>
                 <item name="android:windowReturnTransition">@transition/custom_slide_right</item>
+        </style>
+
+        <style name="AppTheme.Settings">
+                <item name="android:windowEnterTransition">@transition/custom_slide_right</item>
+                <item name="android:windowExitTransition">@android:transition/slide_left</item>
+                <item name="android:transitionGroup">true</item>
         </style>
 
 

@@ -8,6 +8,8 @@ import upsa.mimo.es.mountsyourcostume.R;
 /**
  * Created by User on 18/07/2016.
  */
+
+
 public class SettingsFragment extends PreferenceFragment {
 
     @Override
