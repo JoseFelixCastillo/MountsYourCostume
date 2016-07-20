@@ -20,7 +20,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
         // Display the fragment as the main content.
@@ -51,7 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        toolbar.setTitle("Settings");
+        setTitle("Settings");
     }
 }
 
