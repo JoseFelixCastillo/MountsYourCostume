@@ -1,6 +1,8 @@
 package upsa.mimo.es.mountsyourcostume.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +20,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(this);
+        String bol = shared.getString(SettingsFragment.KEY_PREF_SYNC_THEME,"red");
+        if(bol.equals("Naranja")){
+            setTheme(R.style.AppTheme2);
+        }
+        //Log.d(TAG,"boolean es: " + bol);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_settings);

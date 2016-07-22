@@ -19,7 +19,7 @@
 
     <string-array name="theme_optiones_values">
         <item>Normal</item>
-        <item>#212121</item>
+        <item>Naranja</item>
     </string-array>
 
 </resources>

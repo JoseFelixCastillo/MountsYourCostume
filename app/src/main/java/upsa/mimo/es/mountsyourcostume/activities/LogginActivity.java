@@ -1,8 +1,13 @@
 package upsa.mimo.es.mountsyourcostume.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -42,9 +47,9 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
     private static final String TWITTER_SECRET = "aOKjp3alg4IhcXtbF4DwILZ8GYQ6fo9gUKMk9Uqvx95TtSE5w6";
 
 
-    public static final String LOGGIN_NAME = "displayName";
+ //   public static final String LOGGIN_NAME = "displayName";
    // public static final String LOGGIN_EMAIL = "displayEmail";
-    public static final String LOGGIN_URL_IMAGE = "imageUrl";
+ //   public static final String LOGGIN_URL_IMAGE = "imageUrl";
 
     public static final String FLAG_LOGGIN = "flagLoggin";
     public static final int FLAG_TWITTER = 1;
@@ -104,6 +109,13 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
 
     private void initGooglePlus(){
      //   loadGoogleButton();
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.GET_ACCOUNTS}, 0);
+            }
+        }
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -139,6 +151,13 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         }
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            finish();
+        }
+    }
 
     private void checkGoogleSignInResult(GoogleSignInResult signInResult){
 
@@ -146,7 +165,8 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         if(signInResult.isSuccess()){
             Log.d(TAG, "entramos a checkin google2");
             account = signInResult.getSignInAccount();
-            goToMainActivityWithGooglePlus();
+            goToMainActivity(FLAG_GOGGLEPLUS);
+         //   goToMainActivityWithGooglePlus();
         }
         else{
             hideProgressDialog();
@@ -158,9 +178,9 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         buttonGoogleSignIn.setScopes(gso.getScopeArray());
     }
 
-    private void goToMainActivityWithGooglePlus(){
+  /*  private void goToMainActivityWithGooglePlus(){
 
-        Intent profileIntent = new Intent(this, MainActivity.class);
+     //   Intent profileIntent = new Intent(this, MainActivity.class);
         if(account.getDisplayName()!=null) {
             MyApplication.user.setName(account.getDisplayName());
            // profileIntent.putExtra(LOGGIN_NAME, account.getDisplayName());
@@ -178,10 +198,11 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         Log.d(TAG, "entramos a vamos al activity main");
         MyApplication.user.setSocialNetwork(LogginActivity.FLAG_GOGGLEPLUS);
        // profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_GOGGLEPLUS);
-        startActivity(profileIntent);
-        hideProgressDialog();
-        finish();
-    }
+     //   startActivity(profileIntent);
+       // hideProgressDialog();
+      //  finish();*/
+
+ //   }
     //For twitter
     private void initTwitter(){
      //   loginTwitterButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
@@ -225,7 +246,7 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
                  //   profileIntent.putExtra(LogginActivity.LOGGIN_URL_IMAGE, url_image);
                 }
                 MyApplication.user.setSocialNetwork(LogginActivity.FLAG_TWITTER);
-                goToMainActivityWithTwitter();
+                goToMainActivity(FLAG_TWITTER);
               /*  if (email != null) {
                     //  profileIntent.putExtra(LogginActivity.LOGGIN_EMAIL, email);
                     Log.d(TAG, "Twitter email: " + email);
@@ -312,12 +333,12 @@ public class LogginActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    private void goToMainActivityWithTwitter(){
+    private void goToMainActivity(int flag){
 
         Intent profileIntent = new Intent(LogginActivity.this, MainActivity.class);
 
         Log.d(TAG, "iniciando con twitter");
-        profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_TWITTER);
+        profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, flag);
         profileIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(profileIntent);
         hideProgressDialog();

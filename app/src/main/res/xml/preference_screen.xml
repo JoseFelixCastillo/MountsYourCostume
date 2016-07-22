@@ -2,13 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Interfaz Visual">
     <CheckBoxPreference
-        android:key="pref_screen_rotation"
+        android:key="KEY_PREF_SYNC_ROTATION"
         android:title="Habilitar Rotación de Pantalla"
         android:summary="Permite habilitar o desactivar la rotacion de pantalla"
         android:defaultValue="true" />
     <ListPreference
-
-        android:key="pref_syncConnectionType"
+        android:key="KEY_PREF_SYNC_THEME"
         android:title="Tema"
         android:dialogTitle="Tema"
         android:entries="@array/theme_options_entries"

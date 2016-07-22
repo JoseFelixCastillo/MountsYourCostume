@@ -1,6 +1,8 @@
 package upsa.mimo.es.mountsyourcostume.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -10,6 +12,7 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 
 import upsa.mimo.es.mountsyourcostume.R;
+import upsa.mimo.es.mountsyourcostume.activities.SettingsActivity;
 
 /**
  * Created by User on 18/07/2016.
@@ -19,7 +22,8 @@ import upsa.mimo.es.mountsyourcostume.R;
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static final String TAG = SettingsFragment.class.getSimpleName();
-    public static final String KEY_PREF_SYNC_CONN = "pref_syncConnectionType";
+    public static final String KEY_PREF_SYNC_THEME = "KEY_PREF_SYNC_THEME";
+    public static final String KEY_PREF_SYNC_ROTATION = "KEY_PREF_SYNC_ROTATION";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
       //  PreferenceManager.setDefaultValues(getActivity(),R.xml.preference_screen,false);
 
         for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
-            initSummary(getPreferenceScreen().getPreference(i));
+         //   initSummary(getPreferenceScreen().getPreference(i));
         }
     }
     @Override
@@ -51,13 +55,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-        if (key.equals(KEY_PREF_SYNC_CONN)) {
+        if (key.equals(KEY_PREF_SYNC_THEME)) {
             updatePreferences(findPreference(key));
             // Set summary to be the user-description for the selected value
           //  Log.d(TAG, connectionPref.setSummary(sharedPreferences.getString(key, "")));
         }
-        else if(key.equals("pref_screen_rotation")){
-            Log.d(TAG,"entro para ver lo que hay shared");
+        else if(key.equals(KEY_PREF_SYNC_ROTATION)){
+            updatePreferences(findPreference(key));
+          //  Log.d(TAG,"entro para ver lo que hay shared");
         }
     }
 
@@ -78,10 +83,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) p;
             if(checkBoxPreference.isChecked()){
                 Log.d(TAG, "esta check");
+                //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
             else{
                 Log.d(TAG, "no esta check");
+                getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
+
+
          //   p.setSummary(editTextPref.getText());
         }
         else if(p instanceof ListPreference){
@@ -89,6 +98,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             ListPreference listPreference = (ListPreference) p;
             //listPreference.setSummary("h");
             Log.d(TAG, "lista item: " + listPreference.getValue());
+            Intent intent = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+            getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
         }
     }
 
