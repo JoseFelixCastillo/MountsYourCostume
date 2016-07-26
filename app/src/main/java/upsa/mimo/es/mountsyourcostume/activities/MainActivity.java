@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,11 +34,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
-import upsa.mimo.es.mountsyourcostume.fragments.FavouriteCostume;
-import upsa.mimo.es.mountsyourcostume.fragments.SaveCostume;
-import upsa.mimo.es.mountsyourcostume.fragments.SearchCostume;
+import upsa.mimo.es.mountsyourcostume.fragments.FavouriteCostumeFragment;
+import upsa.mimo.es.mountsyourcostume.fragments.SaveCostumeFragment;
+import upsa.mimo.es.mountsyourcostume.fragments.SearchCostumeFragment;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "MAIN_ACTIVITY";
 
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         //MainFragment mainFragment = MainFragment.newInstance();
         if(savedInstanceState==null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            FavouriteCostume mainFragment = FavouriteCostume.newInstance();
+            FavouriteCostumeFragment mainFragment = FavouriteCostumeFragment.newInstance();
             ft.replace(R.id.main_frame, mainFragment);
             ft.commit();
             //setTitle("Favourites");
@@ -192,22 +191,25 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 loadNavigationHeaderWithIntent(getIntent());
                 return true;
             case R.id.item1:
-                fragment = FavouriteCostume.newInstance();
+                fragment = FavouriteCostumeFragment.newInstance();
                 break;
             case R.id.item2:
-                fragment = SaveCostume.newInstance();
+                fragment = SaveCostumeFragment.newInstance();
                 break;
             case R.id.item3:
-                fragment = SearchCostume.newInstance();
+                fragment = SearchCostumeFragment.newInstance();
                 break;
             case R.id.action_settings:
                 Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+                intent.putExtra(SettingsActivity.FLAG_FRAGMENT,SettingsActivity.FLAG_SETTINGS_FRAGMENT);
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
                 ActivityCompat.startActivity(MainActivity.this,intent,options.toBundle());
-              //  startActivity(intent);
                 return true;
-              //  getFragmentManager().beginTransaction().
             case R.id.info_settings:
+                Intent intent1 = new Intent(MainActivity.this,SettingsActivity.class);
+                intent1.putExtra(SettingsActivity.FLAG_FRAGMENT,SettingsActivity.FLAG_INFO_FRAGMENT);
+                ActivityOptionsCompat options1 = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+                ActivityCompat.startActivity(MainActivity.this,intent1,options1.toBundle());
                 return true;
 
         }

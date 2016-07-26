@@ -12,7 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Transition;
@@ -31,7 +30,7 @@ import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.dialogs.DialogConfirmDeleteCostume;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
 
-public class CostumeActivity extends AppCompatActivity implements DialogConfirmDeleteCostume.DialogConfirmDeleteCostumeInterface{
+public class CostumeActivity extends BaseActivity implements DialogConfirmDeleteCostume.DialogConfirmDeleteCostumeInterface{
 
     public static final String EXTRA_ITEM = "CostumeActivity:extraItem";
 
@@ -174,8 +173,41 @@ public class CostumeActivity extends AppCompatActivity implements DialogConfirmD
         steps.setText(costume.getSteps());
         price.setText(String.format("%d",costume.getPrize()));
        // price.setText(Integer.toString(costume.getPrize()));
-        // Picasso.with(this).load(costume.getUri_image()).into(image);
+       /* Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                image.setImageBitmap(bitmap);
+                Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+
+                        int contentScrimColor = palette.getVibrantColor(ContextCompat.getColor(CostumeActivity.this,R.color.colorPrimary));
+                        int statusScrimColor = palette.getDarkVibrantColor(ContextCompat.getColor(CostumeActivity.this,R.color.colorPrimaryDark));
+                        int expandedTitleColor = palette.getMutedColor(ContextCompat.getColor(CostumeActivity.this,R.color.primary_text));
+                        int collapsedTitleColor = palette.getLightMutedColor(ContextCompat.getColor(CostumeActivity.this,R.color.primary_light));
+
+                        collapsingToolbar.setContentScrimColor(contentScrimColor);
+                        collapsingToolbar.setStatusBarScrimColor(statusScrimColor);
+                        collapsingToolbar.setExpandedTitleColor(expandedTitleColor);
+                        collapsingToolbar.setCollapsedTitleTextColor(collapsedTitleColor);
+                    }
+                });
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };*/
+      //  Picasso.with(this).load(new File(costume.getUri_image())).into(target);
         image.setImageURI(Uri.parse(costume.getUri_image()));
+
     }
 
     private int deleteCostume(String name){

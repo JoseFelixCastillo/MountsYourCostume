@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="upsa.mimo.es.mountsyourcostume.fragments.SaveCostume"
+    tools:context="upsa.mimo.es.mountsyourcostume.fragments.SaveCostumeFragment"
     android:fitsSystemWindows="true">
 
     <android.support.v4.widget.NestedScrollView

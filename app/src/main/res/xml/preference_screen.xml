@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Interfaz Visual">
+    <!--<PreferenceCategory android:title="rotation">-->
     <CheckBoxPreference
         android:key="KEY_PREF_SYNC_ROTATION"
         android:title="Habilitar Rotación de Pantalla"
         android:summary="Permite habilitar o desactivar la rotacion de pantalla"
         android:defaultValue="true" />
-    <ListPreference
+  <!--  <ListPreference
         android:key="KEY_PREF_SYNC_THEME"
-        android:title="Tema"
-        android:dialogTitle="Tema"
+        android:title="Capacidad BD"
+        android:dialogTitle="Capacidad Base Datos"
         android:entries="@array/theme_options_entries"
         android:entryValues="@array/theme_optiones_values"
-        android:defaultValue="@color/primary_text"
-         />
-    </PreferenceCategory>
+        android:defaultValue="10"
+         />-->
+    <!--</PreferenceCategory>-->
 </PreferenceScreen>

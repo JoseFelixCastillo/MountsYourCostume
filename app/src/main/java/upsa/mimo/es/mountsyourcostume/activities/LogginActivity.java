@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewGroup;
 
@@ -38,7 +37,7 @@ import io.fabric.sdk.android.Fabric;
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 
-public class LogginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LogginActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = LogginActivity.class.getSimpleName();
 

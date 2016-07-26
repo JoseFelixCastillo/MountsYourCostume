@@ -2,7 +2,6 @@ package upsa.mimo.es.mountsyourcostume.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -24,6 +23,17 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private static final String TAG = SettingsFragment.class.getSimpleName();
     public static final String KEY_PREF_SYNC_THEME = "KEY_PREF_SYNC_THEME";
     public static final String KEY_PREF_SYNC_ROTATION = "KEY_PREF_SYNC_ROTATION";
+    public static final String KEY_PREF_THEME_NORMAL = "Normal";
+    public static final String KEY_PREF_THEME_ORANGE = "Orange";
+
+    public SettingsFragment(){
+
+    }
+
+    public static SettingsFragment newInstance(){
+        SettingsFragment fragment = new SettingsFragment();
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
          //   initSummary(getPreferenceScreen().getPreference(i));
         }
     }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -80,7 +92,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void updatePreferences(Preference p) {
         if (p instanceof CheckBoxPreference) {
             Log.d(TAG, "entro check");
-            CheckBoxPreference checkBoxPreference = (CheckBoxPreference) p;
+            Intent intent = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+            getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+           /* CheckBoxPreference checkBoxPreference = (CheckBoxPreference) p;
             if(checkBoxPreference.isChecked()){
                 Log.d(TAG, "esta check");
                 //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -89,7 +105,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 Log.d(TAG, "no esta check");
                 getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
-
+*/
 
          //   p.setSummary(editTextPref.getText());
         }
@@ -98,12 +114,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             ListPreference listPreference = (ListPreference) p;
             //listPreference.setSummary("h");
             Log.d(TAG, "lista item: " + listPreference.getValue());
-            Intent intent = new Intent(getActivity(), SettingsActivity.class);
+            /*Intent intent = new Intent(getActivity(), SettingsActivity.class);
             startActivity(intent);
             getActivity().finish();
-            getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+            getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);*/
         }
+
     }
-
-
 }

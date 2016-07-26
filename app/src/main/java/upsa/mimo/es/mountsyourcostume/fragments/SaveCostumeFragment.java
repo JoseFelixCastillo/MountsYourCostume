@@ -50,7 +50,7 @@ import upsa.mimo.es.mountsyourcostume.dialogs.DialogChooseOptionCamera;
 import upsa.mimo.es.mountsyourcostume.events.MessageOptionCameraEvent;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
 
-public class SaveCostume extends Fragment {
+public class SaveCostumeFragment extends Fragment {
 
     private static final int CODE_PERMISSION_CAMERA = 80;
 
@@ -112,13 +112,13 @@ public class SaveCostume extends Fragment {
    // private EditText editTextPrize;
 
 
-    public SaveCostume() {
+    public SaveCostumeFragment() {
         // Required empty public constructor
     }
 
 
-    public static SaveCostume newInstance() {
-        SaveCostume fragment = new SaveCostume();
+    public static SaveCostumeFragment newInstance() {
+        SaveCostumeFragment fragment = new SaveCostumeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

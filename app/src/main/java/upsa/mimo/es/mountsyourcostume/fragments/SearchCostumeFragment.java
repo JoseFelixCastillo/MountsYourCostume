@@ -1,8 +1,5 @@
 package upsa.mimo.es.mountsyourcostume.fragments;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -12,20 +9,20 @@ import android.view.ViewGroup;
 
 import upsa.mimo.es.mountsyourcostume.R;
 
-public class SearchCostume extends Fragment {
+public class SearchCostumeFragment extends Fragment {
 
     private final String TAG = "SEARCH_COSTUME";
 
     //private SQLiteDatabase db;
     private RecyclerView recyclerView;
 
-    public SearchCostume() {
+    public SearchCostumeFragment() {
         // Required empty public constructor
     }
 
 
-    public static SearchCostume newInstance() {
-        SearchCostume fragment = new SearchCostume();
+    public static SearchCostumeFragment newInstance() {
+        SearchCostumeFragment fragment = new SearchCostumeFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);

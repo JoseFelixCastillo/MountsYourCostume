@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="upsa.mimo.es.mountsyourcostume.fragments.SearchCostume">
+    tools:context=".fragments.SearchCostumeFragment">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

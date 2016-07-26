@@ -24,7 +24,7 @@ import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
 
 
-public class FavouriteCostume extends Fragment implements CostumeAdapter.OnItemClickListener{
+public class FavouriteCostumeFragment extends Fragment implements CostumeAdapter.OnItemClickListener{
 
     private final String TAG = "FAVOURITE_COSTUME";
 
@@ -35,13 +35,13 @@ public class FavouriteCostume extends Fragment implements CostumeAdapter.OnItemC
 
 
 
-    public FavouriteCostume() {
+    public FavouriteCostumeFragment() {
         // Required empty public constructor
     }
 
 
-    public static FavouriteCostume newInstance() {
-        FavouriteCostume fragment = new FavouriteCostume();
+    public static FavouriteCostumeFragment newInstance() {
+        FavouriteCostumeFragment fragment = new FavouriteCostumeFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
