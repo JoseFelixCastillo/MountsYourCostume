@@ -196,25 +196,6 @@ public class SaveCostumeFragment extends Fragment {
         }
 
     }
-
- /*   private void loadUI(){
-
-        editTextName = (EditText) getView().findViewById(R.id.edit_text_name);
-        editTextMaterials = (EditText) getView().findViewById(R.id.edit_text_materials);
-        editTextSteps = (EditText) getView().findViewById(R.id.edit_text_steps);
-        editTextPrize = (EditText) getView().findViewById(R.id.edit_text_prize);
-
-        container = (ViewGroup) getView().findViewById(R.id.save_costume_container);
-
-        imageViewPhoto = (ImageView) getView().findViewById(R.id.image_view_costume);
-        imageViewPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-    }*/
-
     //For spinner
     private void initSpinner(){
       //  Spinner spinner = (Spinner) getView().findViewById(R.id.spinner);

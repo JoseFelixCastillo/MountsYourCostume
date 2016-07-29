@@ -217,6 +217,8 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        //Se pone primero el setcustomanimation
+        fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
         fragmentTransaction.replace(R.id.main_frame,fragment);
         /// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         //fragmentTransaction.addToBackStack(null);
