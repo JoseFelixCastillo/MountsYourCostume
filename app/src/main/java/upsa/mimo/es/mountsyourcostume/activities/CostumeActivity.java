@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,11 +14,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +37,7 @@ import upsa.mimo.es.mountsyourcostume.model.Costume;
 
 public class CostumeActivity extends BaseActivity implements DialogConfirmDeleteCostume.DialogConfirmDeleteCostumeInterface{
 
+    private static final String TAG = CostumeActivity.class.getSimpleName();
     public static final String EXTRA_ITEM = "CostumeActivity:extraItem";
 
     @BindView(R.id.collapsing_toolbar_activity_costume)
@@ -68,6 +74,8 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
         FragmentManager fm = getSupportFragmentManager();
         dialog.show(fm,DialogConfirmDeleteCostume.TAG);
     }
+
+    private Costume costume;
 
 
     @Override
@@ -164,7 +172,9 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
 
     }
 
-    private void initFields(Costume costume){
+    private void initFields(final Costume costume){
+
+        this.costume = costume;
 
         setTitle(costume.getName());
 
@@ -206,12 +216,34 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
             }
         };*/
       //  Picasso.with(this).load(new File(costume.getUri_image())).into(target);
-        image.setImageURI(Uri.parse(costume.getUri_image()));
+      //  Picasso.with(this).load(new File(costume.getUri_image())).centerCrop().into(image);
+    //    image.setImageURI(Uri.parse(costume.getUri_image()));
+
+        ViewTreeObserver viewTreeObserver = image.getViewTreeObserver();
+        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                image.getViewTreeObserver().removeOnPreDrawListener(this);
+                int width,height;
+                width = image.getMeasuredWidth();
+                height = image.getMeasuredHeight();
+                Log.d(TAG, "EN OBSERVER: width: "+  width + " heigth: " + height);
+
+                Picasso.with(CostumeActivity.this).load(new File(costume.getUri_image())).resize(width,height).centerCrop().into(image);
+                return true;
+            }
+        });
 
     }
 
     private int deleteCostume(String name){
 
+
+        //Primero borramos la foto y despues de local  //Quitar el if()
+        File file = new File(costume.getUri_image());
+        if(file.delete()){
+            Log.d(TAG,"he borrado foto");
+        }
         return MyApplication.getLocalPersistance().deleteCostume(name);
 
     }

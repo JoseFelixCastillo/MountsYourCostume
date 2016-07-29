@@ -32,6 +32,7 @@ import com.twitter.sdk.android.Twitter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import upsa.mimo.es.mountsyourcostume.BuildConfig;
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.fragments.FavouriteCostumeFragment;
@@ -179,6 +180,8 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_settings,menu);
+        MenuItem itemPremium = menu.findItem(R.id.info_settings);
+        itemPremium.setVisible(BuildConfig.FLAVOR.equals("premium"));
         return true;
     }
 

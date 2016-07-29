@@ -68,6 +68,7 @@ public class SaveCostumeFragment extends Fragment {
     //For photo
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final String KEY_PHOTO_BITMAP = "photoBitmap";
 
     //  private ViewGroup container;
     //For savedinstance
@@ -159,8 +160,8 @@ public class SaveCostumeFragment extends Fragment {
 
         }
         if(savedInstanceState!=null){
-            if(savedInstanceState.getParcelable("photoBitmap")!=null){
-                imageViewPhoto.setImageBitmap((Bitmap) savedInstanceState.getParcelable("photoBitmap"));
+            if(savedInstanceState.getParcelable(KEY_PHOTO_BITMAP)!=null){
+                imageViewPhoto.setImageBitmap((Bitmap) savedInstanceState.getParcelable(KEY_PHOTO_BITMAP));
             }
         }
     }
@@ -191,7 +192,7 @@ public class SaveCostumeFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if(imageViewPhoto.getDrawable()!=null){
             photoBitmap = ((BitmapDrawable) imageViewPhoto.getDrawable()).getBitmap();
-            outState.putParcelable("photoBitmap", photoBitmap);
+            outState.putParcelable(KEY_PHOTO_BITMAP, photoBitmap);
         }
 
     }

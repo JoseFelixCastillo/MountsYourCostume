@@ -1,6 +1,7 @@
 package upsa.mimo.es.mountsyourcostume.fragments;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -90,7 +91,12 @@ public class FavouriteCostumeFragment extends Fragment implements CostumeAdapter
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view_favourite);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        if(getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE){
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        }
+        else if(getResources().getConfiguration().orientation== Configuration.ORIENTATION_PORTRAIT) {
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        }
         //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
