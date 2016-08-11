@@ -103,7 +103,7 @@ public class MyTextInputEditText extends TextInputEditText {
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
-        if(state instanceof Bundle && state!=null){
+        if(state!=null && state instanceof Bundle){
             Bundle bundle = (Bundle) state;
             index = bundle.getInt(KEY_STATE_INDEX);
             super.onRestoreInstanceState(bundle.getParcelable(KEY_STATE_PARCELABLE));

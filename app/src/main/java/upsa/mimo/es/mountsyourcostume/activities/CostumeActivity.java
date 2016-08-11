@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.transition.Transition;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,30 +41,21 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
 
     @BindView(R.id.collapsing_toolbar_activity_costume)
     CollapsingToolbarLayout collapsingToolbar;
-    //private CollapsingToolbarLayout collapsingToolbar;
 
     @BindView(R.id.category_activity_costume)
     TextView category;
-   // private TextView category;
     @BindView(R.id.materials_activity_costume)
     TextView materials;
-   // private TextView materials;
     @BindView(R.id.steps_activity_costume)
     TextView steps;
-  //  private TextView steps;
     @BindView(R.id.price_activity_costume)
     TextView price;
-  //  private TextView price;
     @BindView(R.id.image_costume)
     ImageView image;
- //   private FloatingActionButton fab;
     @BindView(R.id.coordinator_activity_costume)
     ViewGroup container;
     @BindView(R.id.toolbar_activity_costume)
     Toolbar toolbar;
-
-    //  private ViewGroup container;
-    //   private ImageView image;
     @BindView(R.id.fab_activity_costume)
     FloatingActionButton fab;
     @OnClick(R.id.fab_activity_costume)
@@ -88,9 +78,9 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
         enableFullScreen();
 
         initFields((Costume) getIntent().getParcelableExtra(EXTRA_ITEM));
-        //Para el fab ver si es bueno
+
         delayAnimations();
-     //   fab.show();
+
     }
 
     private void enableFullScreen() {
@@ -113,7 +103,6 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
         }
     }
 
-    //Comproabar a partir de aqui a ver que hace
     private void animateTitleAlpha(boolean reverse) {
         ValueAnimator animator;
         if (reverse) {
@@ -182,6 +171,7 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
         materials.setText(costume.getMaterials());
         steps.setText(costume.getSteps());
         price.setText(String.format("%d",costume.getPrize()));
+        //Dejo el codigo de palette pero al final no me gusto el resultado puesto que le daba colores raros.
        // price.setText(Integer.toString(costume.getPrize()));
        /* Target target = new Target() {
             @Override
@@ -227,7 +217,7 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
                 int width,height;
                 width = image.getMeasuredWidth();
                 height = image.getMeasuredHeight();
-                Log.d(TAG, "EN OBSERVER: width: "+  width + " heigth: " + height);
+            //    Log.d(TAG, "EN OBSERVER: width: "+  width + " heigth: " + height);
 
                 Picasso.with(CostumeActivity.this).load(new File(costume.getUri_image())).resize(width,height).centerCrop().into(image);
                 return true;
@@ -237,13 +227,9 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
     }
 
     private int deleteCostume(String name){
-
-
-        //Primero borramos la foto y despues de local  //Quitar el if()
+        //Primero borramos la foto y despues de local
         File file = new File(costume.getUri_image());
-        if(file.delete()){
-            Log.d(TAG,"he borrado foto");
-        }
+        file.delete();
         return MyApplication.getLocalPersistance().deleteCostume(name);
 
     }
@@ -261,7 +247,7 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
     public void confirmDelete() {
         int deletions = deleteCostume(getTitle().toString());
         if(deletions>0){
-            Snackbar snackbar = Snackbar.make(container,"Costume eliminado",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(container, R.string.costume_removed,Snackbar.LENGTH_LONG);
             snackbar.show();
             final Intent intent = new Intent(CostumeActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -281,7 +267,7 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
             }
         }
         else{
-            Snackbar snackbar = Snackbar.make(container,"No se pudo eliminar",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(container, R.string.it_could_not_removed,Snackbar.LENGTH_LONG);
             snackbar.show();
         }
     }

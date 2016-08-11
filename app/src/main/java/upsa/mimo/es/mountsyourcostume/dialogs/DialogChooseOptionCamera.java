@@ -36,7 +36,7 @@ public class DialogChooseOptionCamera extends DialogFragment implements DialogIn
         ListAdapter adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1,
                 getResources().getStringArray(R.array.photo_options));
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle("Selecciona una opción")
+        dialog.setTitle(R.string.choose_one_option)
                 .setSingleChoiceItems(adapter,0,this);
 
         return dialog.create();

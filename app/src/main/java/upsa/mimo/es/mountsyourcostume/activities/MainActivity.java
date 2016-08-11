@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
     //For login with google+
     private GoogleApiClient googleApiClient;
-    private static final String IS_DRAWER = "isDrawer";
+  //  private static final String IS_DRAWER = "isDrawer";
 
     //For savedInstance
     private String title = "Favourite";
@@ -55,14 +55,14 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
     @BindView(R.id.container)
     ViewGroup container;
-   // private ViewGroup container;
+
 
     @BindView(R.id.drawer)
     DrawerLayout drawer;
 
     @BindView(R.id.navigation_view)
     NavigationView navigationView;
-   // private DrawerLayout drawer;
+
     //For drawer layout
    // private ImageView imageViewNavigationHeader;
     private TextView textViewNavigationHeaderName;
@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         loadToolBar();
 
     //    NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        Log.d(TAG, "navigation creado");
+     //   Log.d(TAG, "navigation creado");
 
         if(navigationView!=null) {
             navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -126,23 +126,22 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
     private void loadNavigationHeaderWithIntent(Intent intent) {
 
-        Log.d(TAG,"LLEGOOO al loadNavigationWithIntent");
+      //  Log.d(TAG,"LLEGOOO al loadNavigationWithIntent");
         textViewNavigationHeaderName = (TextView) findViewById(R.id.text_view_navigation_header_name);
         textViewNavigationHeaderEmail = (TextView) findViewById(R.id.text_view_navigation_header_email);
 
         imageViewNavigationHeaderLoggin = (ImageView) findViewById(R.id.image_view_social_loggin_navigation_header);
 
         String name = MyApplication.user.getName();
-        // String name = intent.getStringExtra(LogginActivity.LOGGIN_NAME);
+
         String email = MyApplication.user.getEmail();
        // String email = intent.getStringExtra(LogginActivity.LOGGIN_EMAIL);
         String url_image = MyApplication.user.getPhotoURL();
-        //  String url_image = intent.getStringExtra(LogginActivity.LOGGIN_URL_IMAGE);
+
         this.flagLoggin = MyApplication.user.getSocialNetwork();
-      //  this.flagLoggin = intent.getIntExtra(LogginActivity.FLAG_LOGGIN,0);
+
 
         if(name!=null){
-            Log.d(TAG, name);
             textViewNavigationHeaderName.setText(name);
         }
         if(email!=null){
@@ -150,7 +149,6 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         }
 
         if(url_image!=null){
-            Log.d(TAG,url_image);
             setupImageProfile(url_image);
         }
         if(this.flagLoggin==LogginActivity.FLAG_TWITTER){
@@ -168,9 +166,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
     private void loadToolBar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-      //  toolbar.inflateMenu(R.menu.menu_settings);
 
-        //Ver
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(new DrawerArrowDrawable(toolbar.getContext()));
@@ -286,9 +282,9 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
     private void createAlertDialogForLogOut(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setCancelable(false)
-                .setTitle("Log Out")
-                .setMessage("Would you cancel session")
-                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.log_out)
+                .setMessage(R.string.would_you_cancel_session)
+                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(flagLoggin==LogginActivity.FLAG_GOGGLEPLUS) {
@@ -299,7 +295,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
                         }
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -342,7 +338,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
             drawer.openDrawer(GravityCompat.START);
             loadNavigationHeaderWithIntent(getIntent());
         }*/
-        Log.d(TAG,"onRestore1");
+      //  Log.d(TAG,"onRestore1");
         super.onRestoreInstanceState(savedInstanceState);
         if(savedInstanceState!=null){
 

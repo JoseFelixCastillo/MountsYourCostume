@@ -2,7 +2,6 @@ package upsa.mimo.es.mountsyourcostume.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -31,7 +30,7 @@ public class SettingsActivity extends BaseActivity {
         // Display the fragment as the main content.
         initToolbar();
         int flag = getIntent().getIntExtra(FLAG_FRAGMENT,0);
-        Fragment fragment;
+
         if(flag==FLAG_SETTINGS_FRAGMENT) {
             getFragmentManager().beginTransaction()
                     .replace(R.id.main_frame_settings, SettingsFragment.newInstance())
@@ -66,7 +65,7 @@ public class SettingsActivity extends BaseActivity {
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        setTitle("Settings");
+        setTitle(getString(R.string.settings));
     }
 }
 
