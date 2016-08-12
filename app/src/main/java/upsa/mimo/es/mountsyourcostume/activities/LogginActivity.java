@@ -232,8 +232,10 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
             @Override
             public void success(final Result<User> result) {
 
+                //Crearlo bien
                 String name = result.data.name;
                 String url_image = result.data.profileImageUrl.replace("_normal","_bigger");
+                String nameId = result.data.screenName;
                 //   String email = result.data.email;
                 if (name != null) {
                     MyApplication.user.setName(name);
@@ -242,6 +244,9 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
                 if (url_image != null) {
                     MyApplication.user.setPhotoURL(url_image);
                  //   profileIntent.putExtra(LogginActivity.LOGGIN_URL_IMAGE, url_image);
+                }
+                if(nameId !=null){
+                    MyApplication.user.setTokenForBD(nameId);
                 }
                 MyApplication.user.setSocialNetwork(LogginActivity.FLAG_TWITTER);
                 goToMainActivity(FLAG_TWITTER);

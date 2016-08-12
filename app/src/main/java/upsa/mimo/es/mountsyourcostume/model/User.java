@@ -6,16 +6,17 @@ package upsa.mimo.es.mountsyourcostume.model;
 public class User {
     private String name;
     private String photoURL;
-    private String email;
+    private String tokenForBD;  //email for google and
     private int socialNetwork;
 
     public User(){
 
     }
 
-    public User(String name, String photoURL){
+    public User(String name, String photoURL, String tokenForBD){
         this.name = name;
         this.photoURL = photoURL;
+        this.tokenForBD = tokenForBD;
     }
 
     public String getName() {
@@ -34,12 +35,12 @@ public class User {
         this.photoURL = photoURL;
     }
 
-    public String getEmail() {
-        return email;
+    public String getTokenForBD() {
+        return tokenForBD;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setTokenForBD(String tokenForBD) {
+        this.tokenForBD = tokenForBD;
     }
 
     public int getSocialNetwork() {
