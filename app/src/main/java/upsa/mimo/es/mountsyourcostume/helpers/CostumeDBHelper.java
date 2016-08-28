@@ -17,7 +17,7 @@ import upsa.mimo.es.mountsyourcostume.model.CostumeSQLiteOpenHelper;
  */
 public class CostumeDBHelper implements LocalPersistance{
 
-    private static final String TAG = "COSTUME_DBHELPER";
+    private static final String TAG = CostumeDBHelper.class.getSimpleName();
 
     private SQLiteDatabase db;
     private static CostumeDBHelper instance;

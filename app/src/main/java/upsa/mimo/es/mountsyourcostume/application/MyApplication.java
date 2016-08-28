@@ -5,7 +5,9 @@ import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
 import upsa.mimo.es.mountsyourcostume.helpers.CostumeDBHelper;
+import upsa.mimo.es.mountsyourcostume.interfaces.CloudPersistance;
 import upsa.mimo.es.mountsyourcostume.interfaces.LocalPersistance;
 import upsa.mimo.es.mountsyourcostume.model.User;
 
@@ -16,6 +18,7 @@ public class MyApplication extends Application {
 
     private static Context context;
     private static LocalPersistance localPersistance;
+    private static CloudPersistance cloudPersistance;
     public static User user;
 
 
@@ -37,6 +40,15 @@ public class MyApplication extends Application {
             localPersistance = CostumeDBHelper.newInstance(context);
         }
         return localPersistance;
+    }
+
+    public static CloudPersistance getCloudPersistance(){
+
+        if(cloudPersistance==null){
+           cloudPersistance  = CloudDBHelper.newInstance(context);
+        }
+
+        return cloudPersistance;
     }
 
 

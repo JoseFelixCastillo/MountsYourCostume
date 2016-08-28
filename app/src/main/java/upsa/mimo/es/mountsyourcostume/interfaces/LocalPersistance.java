@@ -12,3 +12,5 @@ public interface LocalPersistance {
     public long saveCostume(Costume costume);
     public int deleteCostume(String name);
 }
+
+
