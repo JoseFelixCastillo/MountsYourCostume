@@ -17,6 +17,8 @@ import upsa.mimo.es.mountsyourcostume.model.User;
  */
 public class CloudDBHelper implements CloudPersistance {
 
+    public final static String URL = "http://costumedb.herokuapp.com";
+
     private CloudSingleton cloudSingleton;
     private Context context;
     public static CloudDBHelper instance;
@@ -33,15 +35,11 @@ public class CloudDBHelper implements CloudPersistance {
         return instance;
     }
 
-
-    @Override
-    public void getUser() {
-
-    }
-
     @Override
     public void createUser(User user, RequestCreateUser.OnResponseCreateUser onResponseCreateUser) {
 
+        RequestCreateUser requestCreateUser = new RequestCreateUser(cloudSingleton,onResponseCreateUser,context);
+        requestCreateUser.requestCreateUser(user);
     }
 
     @Override
@@ -53,8 +51,8 @@ public class CloudDBHelper implements CloudPersistance {
     @Override
     public void saveCostume(Costume costume, RequestSaveCostume.OnResponseSaveCostume onResponseSaveCostume) {
 
-        RequestSaveCostume requestSaveCostume = new RequestSaveCostume(onResponseSaveCostume,cloudSingleton);
-        requestSaveCostume.requestSaveCostume(context,costume);
+        RequestSaveCostume requestSaveCostume = new RequestSaveCostume(cloudSingleton,onResponseSaveCostume,context);
+        requestSaveCostume.requestSaveCostume(costume);
 
     }
 

@@ -19,7 +19,7 @@ public class MyApplication extends Application {
     private static Context context;
     private static LocalPersistance localPersistance;
     private static CloudPersistance cloudPersistance;
-    public static User user;
+    private static User user;
 
 
     @Override
@@ -49,6 +49,10 @@ public class MyApplication extends Application {
         }
 
         return cloudPersistance;
+    }
+
+    public static User getUser(){
+        return user;
     }
 
 

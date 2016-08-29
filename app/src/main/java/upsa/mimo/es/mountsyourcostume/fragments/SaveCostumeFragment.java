@@ -49,6 +49,7 @@ import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.dialogs.DialogChooseOptionCamera;
 import upsa.mimo.es.mountsyourcostume.events.MessageOptionCameraEvent;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
+import upsa.mimo.es.mountsyourcostume.utils.Utils;
 
 public class SaveCostumeFragment extends Fragment {
 
@@ -358,17 +359,6 @@ public class SaveCostumeFragment extends Fragment {
         return File.createTempFile(timeStamp, ".jpg", outPutDir);
     }*/
 
-
-   private File createFile() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-        File directory =  getActivity().getDir("imageDir", Context.MODE_PRIVATE);
-
-        File file = new File(directory,timeStamp);
-
-        return file;
-    }
-
     private File createTempFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File tempFile = File.createTempFile(timeStamp, ".jpg", getActivity().getCacheDir());
@@ -516,7 +506,7 @@ public class SaveCostumeFragment extends Fragment {
     private File persistImageFromImageView() throws Exception{
 
         if(imageViewPhoto.getDrawable()!=null) {
-            File file = createFile();
+            File file = Utils.createFile(getActivity());
             OutputStream outputStream;
 
             Bitmap image = ((BitmapDrawable) imageViewPhoto.getDrawable()).getBitmap();

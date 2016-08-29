@@ -12,7 +12,6 @@ import upsa.mimo.es.mountsyourcostume.model.User;
  * Created by JoseFelix on 28/08/2016.
  */
 public interface CloudPersistance {
-    public void getUser();
     public void createUser(User user, RequestCreateUser.OnResponseCreateUser onResponseCreateUser);
     public void getCostumes(String category, RequestGetCostumes.OnResponseGetCostumes onResponseGetCostumes);
     public void saveCostume(Costume costume, RequestSaveCostume.OnResponseSaveCostume onResponseSaveCostume);

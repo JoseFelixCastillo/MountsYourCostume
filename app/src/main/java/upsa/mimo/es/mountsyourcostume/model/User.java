@@ -1,16 +1,25 @@
 package upsa.mimo.es.mountsyourcostume.model;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONObject;
+
 /**
  * Created by User on 18/07/2016.
  */
 public class User {
+    @SerializedName("name")
     private String name;
+    @SerializedName("photoURL")
     private String photoURL;
+    @SerializedName("tokenForBD")
     private String tokenForBD;  //email for google and
     private int socialNetwork;
 
     public User(){
-
     }
 
     public User(String name, String photoURL, String tokenForBD){
@@ -50,4 +59,6 @@ public class User {
     public void setSocialNetwork(int socialNetwork) {
         this.socialNetwork = socialNetwork;
     }
+
+
 }

@@ -1,20 +1,42 @@
 package upsa.mimo.es.mountsyourcostume.model;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Base64;
+import android.util.Base64OutputStream;
+import android.util.Log;
 import android.widget.ImageView;
+
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONObject;
+
+import java.io.File;
+
+import io.fabric.sdk.android.services.network.HttpRequest;
+import upsa.mimo.es.mountsyourcostume.utils.Utils;
 
 /**
  * Created by JoseFelix on 29/04/2016.
  */
 public class Costume implements Parcelable{
 
+    @SerializedName("name")
     private String name;
+    @SerializedName("category")
     private String category;
+    @SerializedName("materials")
     private String materials;
+    @SerializedName("steps")
     private String steps;
+    @SerializedName("prize")
     private int prize;
+
     private String uri_image;
+   // @SerializedName("encodedImage")
+    private String encodedImage;
 
     public Costume(String name, String category, String materials, String steps, int prize, String uri_image) {
         this.name = name;
@@ -23,6 +45,7 @@ public class Costume implements Parcelable{
         this.steps = steps;
         this.prize = prize;
         this.uri_image = uri_image;
+       // this.encodedImage = Base64.encodeToString(new File(), Base64.DEFAULT);
     }
 
     public String getName() {
@@ -73,6 +96,14 @@ public class Costume implements Parcelable{
         this.uri_image = uri_image;
     }
 
+    public String getEncodedImage() {
+        return encodedImage;
+    }
+
+    public void setEncodedImage(String encodedImage) {
+        this.encodedImage = encodedImage;
+    }
+
     //methods for doing costume parcelable
     @Override
     public int describeContents() {
@@ -108,4 +139,28 @@ public class Costume implements Parcelable{
             return new Costume[size];
         }
     };
+
+
+    public static Costume getFromJsonObject(JSONObject response, Context context){
+        Costume costume = null;
+        try{
+            Gson gson = new Gson();
+            costume = gson.fromJson(response.toString(),Costume.class);
+        }
+        catch(Exception e){
+            Log.d("COSTUME", "Error al parsear costume");
+        }
+        /*if(costume.getEncodedImage()!=null){
+
+            File file = Utils.createFile(context);
+            Base64.decode(costume.getEncodedImage(),0);
+
+        }*/
+        return costume;
+    }
+
+
+
+
+
 }

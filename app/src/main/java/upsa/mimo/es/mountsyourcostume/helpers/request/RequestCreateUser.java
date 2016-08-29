@@ -1,14 +1,18 @@
 package upsa.mimo.es.mountsyourcostume.helpers.request;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
 import upsa.mimo.es.mountsyourcostume.model.CloudSingleton;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
 import upsa.mimo.es.mountsyourcostume.model.User;
@@ -18,35 +22,41 @@ import upsa.mimo.es.mountsyourcostume.model.User;
  */
 public class RequestCreateUser {
 
-    private static final String URL_REQUEST_SAVE_COSTUME = "http://costumedb.herokuapp.com/user";
+    private static final String TAG = RequestCreateUser.class.getSimpleName();
+    private static final String URL_REQUEST_SAVE_COSTUME = "/user";
+
     public interface OnResponseCreateUser{
         void onResponseCreateUser(JSONObject response);
-        void onErrorResposeCreateUser(VolleyError error);
+        void onErrorResponseCreateUser(VolleyError error);
     }
 
     private OnResponseCreateUser onResponseCreateUser;
     private CloudSingleton cloudSingleton;
+    private Context context;
 
-    public RequestCreateUser(OnResponseCreateUser onResponseCreateUser, CloudSingleton cloudSingleton){
-        this.onResponseCreateUser = onResponseCreateUser;
+    public RequestCreateUser(CloudSingleton cloudSingleton, OnResponseCreateUser onResponseCreateUser, Context context){
         this.cloudSingleton = cloudSingleton;
+        this.onResponseCreateUser = onResponseCreateUser;
+        this.context = context;
     }
 
-    public void requestCreateUser(Context context, User user){
-        // String url =
+    public void requestCreateUser(User user){
+        String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME;
         JSONObject body = createBody(user);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL_REQUEST_SAVE_COSTUME, body, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                if (onResponseCreateUser != null) {
+                Log.d(TAG, "Response create user: " + response.toString());
+                if(onResponseCreateUser!=null){
                     onResponseCreateUser.onResponseCreateUser(response);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Error create user: " + error.getMessage());
                 if(onResponseCreateUser!=null){
-                    onResponseCreateUser.onErrorResposeCreateUser(error);
+                    onResponseCreateUser.onErrorResponseCreateUser(error);
                 }
             }
         });
@@ -57,7 +67,15 @@ public class RequestCreateUser {
 
     private JSONObject createBody(User user){
 
+        JSONObject body = null;
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(user);
+        try {
+            body = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return null;
+        return body;
     }
 }
