@@ -30,9 +30,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.android.volley.VolleyError;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,6 +51,7 @@ import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.dialogs.DialogChooseOptionCamera;
 import upsa.mimo.es.mountsyourcostume.events.MessageOptionCameraEvent;
+import upsa.mimo.es.mountsyourcostume.helpers.request.RequestSaveCostume;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
 import upsa.mimo.es.mountsyourcostume.utils.Utils;
 
@@ -427,6 +431,51 @@ public class SaveCostumeFragment extends Fragment {
 
 
     private void saveInCloud(){
+
+        if(getFields()&&category!=null){
+            File file = null;
+            try {
+                file = persistImageFromImageView();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(file!=null) {
+                //setFileToActuallyPhotoFile(file);
+
+
+                Costume costume = new Costume(name,category,materials,steps,prize,file.getPath());
+              //  long rows = MyApplication.getLocalPersistance().saveCostume(costume);
+
+                MyApplication.getCloudPersistance().saveCostume(costume, new RequestSaveCostume.OnResponseSaveCostume() {
+                    @Override
+                    public void onResponseSaveCostume(JSONObject response) {
+                        Log.d(TAG, "Response de SaveCostume: " + response.toString());
+                    }
+
+                    @Override
+                    public void onErrorResposeSaveCostume(VolleyError error) {
+
+                        Log.d(TAG, "Error de SaveCostume: " + error.toString());
+                    }
+                });
+
+             /*   if (rows > 0) {
+                    Log.d(TAG, "ha habido inserciones");
+                    Snackbar snackbar = Snackbar.make(container,"Se guardo correctamente",Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                } else {
+                    Log.d(TAG, "error insertando posiblemente");
+                }*/
+            }
+            else{
+                Snackbar snackbar = Snackbar.make(container,"Se necesita una imagen",Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        }
+        else{
+            Snackbar snackbar = Snackbar.make(container,"Rellene todos los campos",Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
 
 
     }
