@@ -1,10 +1,13 @@
 package upsa.mimo.es.mountsyourcostume.application;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
+import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
 import upsa.mimo.es.mountsyourcostume.helpers.CostumeDBHelper;
 import upsa.mimo.es.mountsyourcostume.interfaces.CloudPersistance;
@@ -20,6 +23,8 @@ public class MyApplication extends Application {
     private static LocalPersistance localPersistance;
     private static CloudPersistance cloudPersistance;
     private static User user;
+
+    private static ProgressDialog mProgressDialog;
 
 
     @Override
@@ -56,4 +61,24 @@ public class MyApplication extends Application {
     }
 
 
+    //For progress dialog
+    public static void showProgressDialog(FragmentActivity activity) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(activity);
+            mProgressDialog.setMessage(context.getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+        }
+
+        //   Log.d(TAG, "enseño dialog");
+        mProgressDialog.show();
+    }
+
+    public static void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            //     Log.d(TAG, "escondo DIalog");
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
+    }
 }

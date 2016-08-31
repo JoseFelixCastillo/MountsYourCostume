@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
 import upsa.mimo.es.mountsyourcostume.model.CloudSingleton;
-import upsa.mimo.es.mountsyourcostume.model.Costume;
 import upsa.mimo.es.mountsyourcostume.model.User;
 
 /**
@@ -66,16 +65,25 @@ public class RequestCreateUser {
     }
 
     private JSONObject createBody(User user){
-
         JSONObject body = null;
         Gson gson = new Gson();
         String jsonString = gson.toJson(user);
+        Log.d("CREATE USER1","Viendo -string: " + jsonString);
         try {
             body = new JSONObject(jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return body;
+       /* Log.d("CREATE USER","Viendo: " + body.toString());
+        JSONArray jsonArray = null;
+        try {
+           jsonArray = new JSONArray(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonArray;
+*/
+
     }
 }

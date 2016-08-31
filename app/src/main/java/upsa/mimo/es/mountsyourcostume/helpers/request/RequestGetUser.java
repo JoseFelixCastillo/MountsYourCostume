@@ -5,10 +5,12 @@ import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
+import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
+import upsa.mimo.es.mountsyourcostume.helpers.VolleyErrorHelper;
 import upsa.mimo.es.mountsyourcostume.model.CloudSingleton;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
 
@@ -17,10 +19,10 @@ import upsa.mimo.es.mountsyourcostume.model.Costume;
  */
 public class RequestGetUser {
 
-    private static final String URL_REQUEST_SAVE_COSTUME = "http://costumedb.herokuapp.com/users";
+    private static final String URL_REQUEST_SAVE_COSTUME = "/users";
 
     public interface OnResponseGetUser{
-        void onResponseGetUser(JSONObject response);
+        void onResponseGetUser(JSONArray response);
         void onErrorResposeGetUser(VolleyError error);
     }
 
@@ -32,12 +34,12 @@ public class RequestGetUser {
         this.cloudSingleton = cloudSingleton;
     }
 
-    public void requestGetUser(Context context, Costume costume){
-        // String url =
+    public void requestGetUser(final Context context, Costume costume){
+         String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME;
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_REQUEST_SAVE_COSTUME, null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 if (onResponseGetUser != null) {
                     onResponseGetUser.onResponseGetUser(response);
                 }
@@ -45,13 +47,14 @@ public class RequestGetUser {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(onResponseGetUser!=null){
+                VolleyErrorHelper.getMessage(error,context);
+                /*if(onResponseGetUser!=null){
                     onResponseGetUser.onErrorResposeGetUser(error);
-                }
+                }*/
             }
         });
 
-        this.cloudSingleton.addToRequestQueue(jsonObjectRequest);
+        this.cloudSingleton.addToRequestQueue(jsonArrayRequest);
 
     }
 }

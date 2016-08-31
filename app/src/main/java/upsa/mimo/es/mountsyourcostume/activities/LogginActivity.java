@@ -1,7 +1,6 @@
 package upsa.mimo.es.mountsyourcostume.activities;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -54,7 +53,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
     public static final int FLAG_GOGGLEPLUS = 2;
 
     private static final int RC_GOOGLE_SIGN_IN = 9001;
-    private ProgressDialog mProgressDialog;
+   // private ProgressDialog mProgressDialog;
    // private SignInButton buttonGoogleSignIn;
 
     //For google plus
@@ -98,7 +97,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
         super.onStart();
 
       //  Log.d(TAG,"LLEGAMOS AL ONSTART");
-        showProgressDialog();
+        MyApplication.showProgressDialog(this);
         if(!isSignInTwitter()) {
             checkSignInGoogle();
         }
@@ -130,7 +129,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
         //Mostrar dialog con que ha fallado?¿?
-        hideProgressDialog();
+        MyApplication.hideProgressDialog();
       //  Log.d(TAG,"Error en connection failed" + connectionResult.getErrorMessage());
         if(connectionResult.getErrorMessage()!=null) {
             MyApplication.showMessageInSnackBar(container, connectionResult.getErrorMessage());
@@ -167,7 +166,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
          //   goToMainActivityWithGooglePlus();
         }
         else{
-            hideProgressDialog();
+            MyApplication.hideProgressDialog();
         }
     }
 
@@ -275,7 +274,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
 
             @Override
             public void failure(TwitterException exception) {
-                hideProgressDialog();
+                MyApplication.hideProgressDialog();
                 if(!exception.getMessage().contains("request was canceled")){
                 //    Log.d("LOGGIN","Error en twitter wiht Twitter");
                     MyApplication.showMessageInSnackBar(container,exception.getMessage());
@@ -293,7 +292,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
             return true;
         }
         else{
-            hideProgressDialog();
+            MyApplication.hideProgressDialog();
             return false;
         }
     }
@@ -316,7 +315,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
         }
     }
 
-    //For progress dialog
+/*    //For progress dialog
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -334,7 +333,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
        //     Log.d(TAG, "escondo DIalog");
             mProgressDialog.dismiss();
         }
-    }
+    }*/
 
     private void goToMainActivity(int flag){
 
@@ -344,7 +343,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
         profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, flag);
         profileIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(profileIntent);
-        hideProgressDialog();
+        MyApplication.hideProgressDialog();
         finish();
     }
 }

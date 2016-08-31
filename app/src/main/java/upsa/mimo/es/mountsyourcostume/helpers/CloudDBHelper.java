@@ -2,8 +2,6 @@ package upsa.mimo.es.mountsyourcostume.helpers;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestCreateUser;
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestGetCostumes;
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestSaveCostume;
@@ -17,7 +15,9 @@ import upsa.mimo.es.mountsyourcostume.model.User;
  */
 public class CloudDBHelper implements CloudPersistance {
 
-    public final static String URL = "http://bdcostumes.herokuapp.com";
+   // public final static String URL = "http://bdcostumes.herokuapp.com";
+    public final static String URL = "http://52.29.230.208:9000";
+
 
     private CloudSingleton cloudSingleton;
     private Context context;

@@ -1,23 +1,14 @@
 package upsa.mimo.es.mountsyourcostume.model;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-
-import org.json.JSONObject;
 
 /**
  * Created by User on 18/07/2016.
  */
 public class User {
-    @SerializedName("name")
     private String name;
-    @SerializedName("photoURL")
-    private String photoURL;
-    @SerializedName("tokenForBD")
+    private transient String photoURL;
     private String tokenForBD;  //email for google and
-    private int socialNetwork;
+    private transient int socialNetwork;
 
     public User(){
     }

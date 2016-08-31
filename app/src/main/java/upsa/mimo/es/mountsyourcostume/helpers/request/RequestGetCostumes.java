@@ -5,14 +5,12 @@ import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
-import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
 import upsa.mimo.es.mountsyourcostume.model.CloudSingleton;
-import upsa.mimo.es.mountsyourcostume.model.Costume;
 
 /**
  * Created by JoseFelix on 28/08/2016.
@@ -23,7 +21,7 @@ public class RequestGetCostumes {
     private static final String URL_REQUEST_SAVE_COSTUME_2 = "/costumes";
 
     public interface OnResponseGetCostumes{
-        void onResponseGetCostumes(JSONObject response);
+        void onResponseGetCostumes(JSONArray response);
         void onErrorResposeGetCostumes(VolleyError error);
     }
 
@@ -40,9 +38,9 @@ public class RequestGetCostumes {
     public void requestGetCostumes(String category){
          String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_2 + category;
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 if (onResponseGetCostumes != null) {
                     onResponseGetCostumes.onResponseGetCostumes(response);
                 }
@@ -56,16 +54,16 @@ public class RequestGetCostumes {
             }
         });
 
-        this.cloudSingleton.addToRequestQueue(jsonObjectRequest);
+        this.cloudSingleton.addToRequestQueue(jsonArrayRequest);
 
     }
 
     public void requestGetCostumes(){
-        String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_1 + "/" + MyApplication.getUser().getTokenForBD() + "/"
-                + URL_REQUEST_SAVE_COSTUME_2;
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+       // String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_1 + "/" + MyApplication.getUser().getTokenForBD() + URL_REQUEST_SAVE_COSTUME_2;
+        String url = "http://52.29.230.208:9000/costumes/estoMismo";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 if (onResponseGetCostumes != null) {
                     onResponseGetCostumes.onResponseGetCostumes(response);
                 }
@@ -73,13 +71,14 @@ public class RequestGetCostumes {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+              //  Log.d("GETCOSTUMES","Esto: " + VolleyErrorHelper.getMessage(error,context));
                 if(onResponseGetCostumes!=null){
                     onResponseGetCostumes.onErrorResposeGetCostumes(error);
                 }
             }
         });
 
-        this.cloudSingleton.addToRequestQueue(jsonObjectRequest);
+        this.cloudSingleton.addToRequestQueue(jsonArrayRequest);
     }
 
 }

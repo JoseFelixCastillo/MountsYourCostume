@@ -2,17 +2,19 @@ package upsa.mimo.es.mountsyourcostume.helpers.request;
 
 import android.content.Context;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.JSONArray;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
-import upsa.mimo.es.mountsyourcostume.dialogs.MyAlertDialog;
 import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
 import upsa.mimo.es.mountsyourcostume.model.CloudSingleton;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
@@ -24,9 +26,9 @@ public class RequestSaveCostume {
 
     private static final String TAG = RequestSaveCostume.class.getSimpleName();
     private static final String URL_REQUEST_SAVE_COSTUME_1 = "/userc";
-    private static final String URL_REQUEST_SAVE_COSTUME_2 = "/costumes";
+    private static final String URL_REQUEST_SAVE_COSTUME_2 = "/costume";
     public interface OnResponseSaveCostume{
-        void onResponseSaveCostume(JSONObject response);
+        void onResponseSaveCostume(JSONArray response);
         void onErrorResposeSaveCostume(VolleyError error);
     }
 
@@ -40,14 +42,14 @@ public class RequestSaveCostume {
         this.context = context;
     }
 
-    public void requestSaveCostume(Costume costume){
-        String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_1 + "/" + MyApplication.getUser().getTokenForBD() + "/"
-                + URL_REQUEST_SAVE_COSTUME_2;
+    public void requestSaveCostume(final Costume costume){
+        String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_1 + "/" + MyApplication.getUser().getTokenForBD() + URL_REQUEST_SAVE_COSTUME_2;
 
-        JSONObject body = createBody(costume);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
+       // JSONObject body = createBody(costume);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url,null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 if (onResponseSaveCostume != null) {
                     onResponseSaveCostume.onResponseSaveCostume(response);
                 }
@@ -59,22 +61,39 @@ public class RequestSaveCostume {
                     onResponseSaveCostume.onErrorResposeSaveCostume(error);
                 }
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+              //  headers.put("Content-Type", "application/json; charset=utf-8");
+               // headers.put("Accept-Language", "es");
 
-        this.cloudSingleton.addToRequestQueue(jsonObjectRequest);
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody() {
+                return createBody(costume);
+            }
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+
+        this.cloudSingleton.addToRequestQueue(jsonArrayRequest);
 
     }
 
-    private JSONObject createBody(Costume costume){
+    private byte[] createBody(Costume costume){
 
-        JSONObject body = null;
+        byte[] body = null;
         Gson gson = new Gson();
         String jsonString = gson.toJson(costume);
-        try {
-            body = new JSONObject(jsonString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        body = jsonString.getBytes();
+
 
         return body;
 
