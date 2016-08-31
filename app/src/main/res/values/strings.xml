@@ -3,7 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="costume_removed">Costume eliminado</string>
+    <string name="costume_removed">Disfraz eliminado</string>
     <string name="it_could_not_removed">No se pudo eliminar</string>
     <string name="loading">loading</string>
     <string name="log_out">Log Out</string>

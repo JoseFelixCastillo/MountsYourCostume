@@ -2,7 +2,6 @@ package upsa.mimo.es.mountsyourcostume.fragments;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -264,7 +263,7 @@ public class SaveCostumeFragment extends Fragment {
     private boolean checkPermissionCamera(){
         if(Build.VERSION.SDK_INT >=23) {
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG,"permisos entro al primer true");
+
                 return true;
             } else {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, CODE_PERMISSION_CAMERA);

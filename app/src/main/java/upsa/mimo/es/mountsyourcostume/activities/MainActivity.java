@@ -132,13 +132,13 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
         imageViewNavigationHeaderLoggin = (ImageView) findViewById(R.id.image_view_social_loggin_navigation_header);
 
-        String name = MyApplication.user.getName();
+        String name = MyApplication.getUser().getName();
 
-        String email = MyApplication.user.getEmail();
+        String email = MyApplication.getUser().getTokenForBD();
        // String email = intent.getStringExtra(LogginActivity.LOGGIN_EMAIL);
-        String url_image = MyApplication.user.getPhotoURL();
+        String url_image = MyApplication.getUser().getPhotoURL();
 
-        this.flagLoggin = MyApplication.user.getSocialNetwork();
+        this.flagLoggin = MyApplication.getUser().getSocialNetwork();
 
 
         if(name!=null){

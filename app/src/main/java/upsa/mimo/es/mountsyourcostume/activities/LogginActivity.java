@@ -238,17 +238,17 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
                 String nameId = result.data.screenName;
                 //   String email = result.data.email;
                 if (name != null) {
-                    MyApplication.user.setName(name);
+                    MyApplication.getUser().setName(name);
                   //  profileIntent.putExtra(LogginActivity.LOGGIN_NAME, name);
                 }
                 if (url_image != null) {
-                    MyApplication.user.setPhotoURL(url_image);
+                    MyApplication.getUser().setPhotoURL(url_image);
                  //   profileIntent.putExtra(LogginActivity.LOGGIN_URL_IMAGE, url_image);
                 }
                 if(nameId !=null){
-                    MyApplication.user.setTokenForBD(nameId);
+                    MyApplication.getUser().setTokenForBD(nameId);
                 }
-                MyApplication.user.setSocialNetwork(LogginActivity.FLAG_TWITTER);
+                MyApplication.getUser().setSocialNetwork(LogginActivity.FLAG_TWITTER);
                 goToMainActivity(FLAG_TWITTER);
               /*  if (email != null) {
                     //  profileIntent.putExtra(LogginActivity.LOGGIN_EMAIL, email);
