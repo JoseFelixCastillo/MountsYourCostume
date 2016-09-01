@@ -1,6 +1,10 @@
 package upsa.mimo.es.mountsyourcostume.model;
 
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
 /**
  * Created by User on 18/07/2016.
  */
@@ -51,5 +55,10 @@ public class User {
         this.socialNetwork = socialNetwork;
     }
 
+    public static User getFromJson(JSONObject response){
+        Gson gson = new Gson();
+        User user = gson.fromJson(response.toString(),User.class);
+        return user;
+    }
 
 }

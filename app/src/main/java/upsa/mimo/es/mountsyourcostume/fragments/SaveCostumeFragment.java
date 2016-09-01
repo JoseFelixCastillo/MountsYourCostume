@@ -50,8 +50,8 @@ import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.dialogs.DialogChooseOptionCamera;
 import upsa.mimo.es.mountsyourcostume.events.MessageOptionCameraEvent;
-import upsa.mimo.es.mountsyourcostume.helpers.VolleyErrorHelper;
-import upsa.mimo.es.mountsyourcostume.helpers.request.RequestCreateUser;
+import upsa.mimo.es.mountsyourcostume.helpers.request.RequestSaveCostume;
+import upsa.mimo.es.mountsyourcostume.helpers.request.ResponseGeneral;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
 import upsa.mimo.es.mountsyourcostume.utils.Utils;
 
@@ -444,11 +444,11 @@ public class SaveCostumeFragment extends Fragment {
 
 
                 Costume costume = new Costume(name,category,materials,steps,prize,file.getPath());
+              //  costume.setEncodedImage("hola");
               //  long rows = MyApplication.getLocalPersistance().saveCostume(costume);
-
                 MyApplication.showProgressDialog(getActivity());
 
-                MyApplication.getCloudPersistance().createUser(MyApplication.getUser(), new RequestCreateUser.OnResponseCreateUser() {
+               /* MyApplication.getCloudPersistance().createUser(MyApplication.getUser(), new RequestCreateUser.OnResponseCreateUser() {
                     @Override
                     public void onResponseCreateUser(JSONObject response) {
                         Log.d(TAG, "Response de SaveCostume: " + response.toString());
@@ -460,22 +460,22 @@ public class SaveCostumeFragment extends Fragment {
                         Log.d("SAVE COSTUME","error: " + VolleyErrorHelper.getMessage(error,getActivity()));
                         MyApplication.hideProgressDialog();
                     }
-                });
-               /* MyApplication.getCloudPersistance().saveCostume(costume, new RequestSaveCostume.OnResponseSaveCostume() {
+                });*/
+                MyApplication.getCloudPersistance().saveCostume(costume, new RequestSaveCostume.OnResponseSaveCostume() {
                     @Override
-                    public void onResponseSaveCostume(JSONArray response) {
+                    public void onResponseSaveCostume(JSONObject response) {
                         Log.d(TAG, "Response de SaveCostume: " + response.toString());
+                        ResponseGeneral responseGeneral = ResponseGeneral.getFromJson(response);
+                        Log.d(TAG, "Response construido de SaveCostume: " + responseGeneral.getMessage());
                         MyApplication.hideProgressDialog();
                     }
 
                     @Override
                     public void onErrorResposeSaveCostume(VolleyError error) {
 
-                        Log.d("SAVE COSTUME","error: " +VolleyErrorHelper.getMessage(error,getActivity()));
-                       // Log.d(TAG, "Error de SaveCostume: " + error.toString() + " Message: " + error.getMessage());
                         MyApplication.hideProgressDialog();
                     }
-                });*/
+                });
                /* MyApplication.getCloudPersistance().getCostumes(new RequestGetCostumes.OnResponseGetCostumes() {
                     @Override
                     public void onResponseGetCostumes(JSONArray response) {

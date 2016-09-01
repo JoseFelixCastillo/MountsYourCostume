@@ -3,38 +3,24 @@ package upsa.mimo.es.mountsyourcostume.model;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Base64;
-import android.util.Base64OutputStream;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONObject;
-
-import java.io.File;
-
-import io.fabric.sdk.android.services.network.HttpRequest;
-import upsa.mimo.es.mountsyourcostume.utils.Utils;
 
 /**
  * Created by JoseFelix on 29/04/2016.
  */
 public class Costume implements Parcelable{
 
-    @SerializedName("name")
     private String name;
-    @SerializedName("category")
     private String category;
-    @SerializedName("materials")
     private String materials;
-    @SerializedName("steps")
     private String steps;
-    @SerializedName("prize")
     private int prize;
 
-    private String uri_image;
+    private transient String uri_image;
    // @SerializedName("encodedImage")
     private String encodedImage;
 
