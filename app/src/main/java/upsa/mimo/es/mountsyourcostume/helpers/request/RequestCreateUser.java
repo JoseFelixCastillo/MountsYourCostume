@@ -3,6 +3,7 @@ package upsa.mimo.es.mountsyourcostume.helpers.request;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -11,6 +12,9 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
 import upsa.mimo.es.mountsyourcostume.model.CloudSingleton;
@@ -62,6 +66,13 @@ public class RequestCreateUser {
             @Override
             public String getBodyContentType() {
                 return "application/json";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<>();
+                params.put("Accept-Language", "es");
+                return params;
             }
         };
 

@@ -12,10 +12,15 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import upsa.mimo.es.mountsyourcostume.R;
+import upsa.mimo.es.mountsyourcostume.application.MyApplication;
+import upsa.mimo.es.mountsyourcostume.helpers.request.RequestCreateUser;
+import upsa.mimo.es.mountsyourcostume.helpers.request.ResponseGeneral;
 
 /**
  * Created by User on 31/08/2016.
@@ -73,30 +78,56 @@ public class VolleyErrorHelper {
 
         if (response != null) {
             switch (response.statusCode) {
+                case 400:
                 case 404:
-                case 422:
-                case 401:
-                    try {
-                        // server might return error like this { "error": "Some error occured" }
-                        // Use "Gson" to parse the result
-                        HashMap<String, String> result = new Gson().fromJson(new String(response.data),
-                                new TypeToken<Map<String, String>>() {
-                                }.getType());
+                   try {
+                       String dataString = new String(response.data);
+                       JSONObject json = new JSONObject(dataString);
+                       ResponseGeneral responseGeneral = ResponseGeneral.getFromJson(json);
+                       if(responseGeneral.getCode()==ResponseGeneral.USER_NOT_FOUND){
+                           createUser();
+                           return context.getString(R.string.user_not_found);
+                       }
+                       return responseGeneral.getMessage();
+                      /* switch (responseGeneral.getCode()){
+                           case ResponseGeneral.JSON_MALFORMED_CODE:
+                               return context.getString(R.string.miss_param);
+                           case ResponseGeneral.COSTUME_EXIST:
+                               return context.getString(R.string.costume_exist);
+                           case ResponseGeneral.COSTUME_NOT_FOUND:
+                               return context.getString(R.string.costume_not_found);
+                           case ResponseGeneral.USER_EXIST:
+                               return context.getString(R.string.user_exist);
+                           case ResponseGeneral.USER_NOT_FOUND:
+                               return context.getString(R.string.user_not_found);
+                       }*/
 
-                        if (result != null && result.containsKey("error")) {
-                            return result.get("error");
-                        }
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     // invalid request
-                    return error.getMessage();
 
                 default:
                     return context.getResources().getString(R.string.generic_server_down);
             }
         }
         return context.getResources().getString(R.string.generic_error);
+    }
+
+    private static void createUser(){
+        MyApplication.getCloudPersistance().createUser(MyApplication.getUser(), new RequestCreateUser.OnResponseCreateUser() {
+            @Override
+            public void onResponseCreateUser(JSONObject response) {
+                // Log.d(TAG, "Response de SaveCostume: " + response.toString());
+                MyApplication.hideProgressDialog();
+            }
+
+            @Override
+            public void onErrorResponseCreateUser(VolleyError error) {
+                //  Log.d("SAVE COSTUME","error: " + VolleyErrorHelper.getMessage(error,getActivity()));
+                MyApplication.hideProgressDialog();
+            }
+        });
     }
 }

@@ -50,6 +50,7 @@ import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.dialogs.DialogChooseOptionCamera;
 import upsa.mimo.es.mountsyourcostume.events.MessageOptionCameraEvent;
+import upsa.mimo.es.mountsyourcostume.helpers.VolleyErrorHelper;
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestSaveCostume;
 import upsa.mimo.es.mountsyourcostume.helpers.request.ResponseGeneral;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
@@ -143,6 +144,7 @@ public class SaveCostumeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_save_costume, container, false);
+
         ButterKnife.bind(this,view);
         return view;
 
@@ -441,74 +443,47 @@ public class SaveCostumeFragment extends Fragment {
             }
             if(file!=null) {
                 //setFileToActuallyPhotoFile(file);
-
-
                 Costume costume = new Costume(name,category,materials,steps,prize,file.getPath());
               //  costume.setEncodedImage("hola");
               //  long rows = MyApplication.getLocalPersistance().saveCostume(costume);
                 MyApplication.showProgressDialog(getActivity());
+                requestSaveCostume(costume);
 
-               /* MyApplication.getCloudPersistance().createUser(MyApplication.getUser(), new RequestCreateUser.OnResponseCreateUser() {
-                    @Override
-                    public void onResponseCreateUser(JSONObject response) {
-                        Log.d(TAG, "Response de SaveCostume: " + response.toString());
-                        MyApplication.hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onErrorResponseCreateUser(VolleyError error) {
-                        Log.d("SAVE COSTUME","error: " + VolleyErrorHelper.getMessage(error,getActivity()));
-                        MyApplication.hideProgressDialog();
-                    }
-                });*/
-                MyApplication.getCloudPersistance().saveCostume(costume, new RequestSaveCostume.OnResponseSaveCostume() {
-                    @Override
-                    public void onResponseSaveCostume(JSONObject response) {
-                        Log.d(TAG, "Response de SaveCostume: " + response.toString());
-                        ResponseGeneral responseGeneral = ResponseGeneral.getFromJson(response);
-                        Log.d(TAG, "Response construido de SaveCostume: " + responseGeneral.getMessage());
-                        MyApplication.hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onErrorResposeSaveCostume(VolleyError error) {
-
-                        MyApplication.hideProgressDialog();
-                    }
-                });
-               /* MyApplication.getCloudPersistance().getCostumes(new RequestGetCostumes.OnResponseGetCostumes() {
-                    @Override
-                    public void onResponseGetCostumes(JSONArray response) {
-                        Log.d(TAG, "Response de SaveCostume: " + response.toString());
-                        MyApplication.hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onErrorResposeGetCostumes(VolleyError error) {
-                        Log.d(TAG, "Error de SaveCostume: " + error.toString());// + " Message: " + error.networkResponse.data.toString());
-                        MyApplication.hideProgressDialog();
-                    }
-                });*/
-
-             /*   if (rows > 0) {
-                    Log.d(TAG, "ha habido inserciones");
-                    Snackbar snackbar = Snackbar.make(container,"Se guardo correctamente",Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                } else {
-                    Log.d(TAG, "error insertando posiblemente");
-                }*/
             }
             else{
-                Snackbar snackbar = Snackbar.make(container,"Se necesita una imagen",Snackbar.LENGTH_LONG);
-                snackbar.show();
+                MyApplication.showMessageInSnackBar(container,getActivity().getString(R.string.need_image));
             }
         }
         else{
-            Snackbar snackbar = Snackbar.make(container,"Rellene todos los campos",Snackbar.LENGTH_LONG);
-            snackbar.show();
+            MyApplication.showMessageInSnackBar(container,getActivity().getString(R.string.fill_fields));
+
         }
+    }
 
+    private void requestSaveCostume(final Costume costume){
 
+        MyApplication.getCloudPersistance().saveCostume(costume, new RequestSaveCostume.OnResponseSaveCostume() {
+            @Override
+            public void onResponseSaveCostume(JSONObject response) {
+                Log.d(TAG, "Response de SaveCostume: " + response.toString());
+                ResponseGeneral responseGeneral = ResponseGeneral.getFromJson(response);
+                MyApplication.showMessageInSnackBar(container, responseGeneral.getMessage());
+                Log.d(TAG, "Response construido de SaveCostume: " + responseGeneral.getMessage());
+                MyApplication.hideProgressDialog();
+            }
+
+            @Override
+            public void onErrorResposeSaveCostume(VolleyError error) {
+                String message = VolleyErrorHelper.getMessage(error,getActivity());
+                if(message==getActivity().getString(R.string.user_not_found)){
+                    requestSaveCostume(costume);
+                }
+                else {
+                    MyApplication.showMessageInSnackBar(container, message);
+                    MyApplication.hideProgressDialog();
+                }
+            }
+        });
     }
 
     private void saveInFavourites(){
@@ -529,20 +504,20 @@ public class SaveCostumeFragment extends Fragment {
 
                 if (rows > 0) {
                     Log.d(TAG, "ha habido inserciones");
-                    Snackbar snackbar = Snackbar.make(container,"Se guardo correctamente",Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    MyApplication.showMessageInSnackBar(container,getActivity().getString(R.string.save_ok));
+                    /*Snackbar snackbar = Snackbar.make(container, R.string.save_ok,Snackbar.LENGTH_LONG);
+                    snackbar.show();*/
                 } else {
                     Log.d(TAG, "error insertando posiblemente");
                 }
             }
             else{
-                Snackbar snackbar = Snackbar.make(container,"Se necesita una imagen",Snackbar.LENGTH_LONG);
-                snackbar.show();
+                MyApplication.showMessageInSnackBar(container,getActivity().getString(R.string.need_image));
             }
         }
         else{
-            Snackbar snackbar = Snackbar.make(container,"Rellene todos los campos",Snackbar.LENGTH_LONG);
-            snackbar.show();
+            MyApplication.showMessageInSnackBar(container,getActivity().getString(R.string.fill_fields));
+
         }
 
     }

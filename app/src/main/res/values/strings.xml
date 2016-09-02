@@ -15,5 +15,13 @@
     <string name="generic_server_down">Servidor caido</string>
     <string name="no_internet">No hay internet en este momento</string>
     <string name="generic_error">Error desconocido</string>
+    <string name="miss_param">Falta algún parametro para poder guardarlo</string>
+    <string name="costume_exist">Ya existe un disfraz con este nombre</string>
+    <string name="costume_not_found">Disfraz no encontrado</string>
+    <string name="user_exist">El usuario ya existe</string>
+    <string name="user_not_found">Usuario no encontrado</string>
+    <string name="need_image">Se necesita una imagen</string>
+    <string name="fill_fields">Rellene todos los campos</string>
+    <string name="save_ok">Se guardo correctamente</string>
 
 </resources>
