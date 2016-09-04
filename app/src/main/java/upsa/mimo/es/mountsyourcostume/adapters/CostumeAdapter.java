@@ -85,7 +85,8 @@ public class CostumeAdapter extends RecyclerView.Adapter<CostumeAdapter.CostumeV
          //   textViewNameItemViewHolder.setText(costume.getName());
 
             textViewCategoryItemViewHolder.setText(costume.getCategory());
-            setImageWithOberserver(costume);
+            Picasso.with(context).load(new File(costume.getUri_image())).fit().centerCrop().into(imageViewItemViewHolder);
+           // setImageWithOberserver(costume);
            // Log.d(TAG, "BIND: width: "+  width + " heigth: " + height);
 
             //imageViewItemViewHolder.setImageURI(Uri.parse(costume.getUri_image()));
@@ -102,7 +103,7 @@ public class CostumeAdapter extends RecyclerView.Adapter<CostumeAdapter.CostumeV
             });
         }
         //De este forma se reduce el consumo de bytes al colocar fotos
-        private void setImageWithOberserver(final Costume costume){
+       /* private void setImageWithOberserver(final Costume costume){
             ViewTreeObserver viewTreeObserver = imageViewItemViewHolder.getViewTreeObserver();
             viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 @Override
@@ -117,6 +118,6 @@ public class CostumeAdapter extends RecyclerView.Adapter<CostumeAdapter.CostumeV
                     return true;
                 }
             });
-        }
+        }*/
     }
 }

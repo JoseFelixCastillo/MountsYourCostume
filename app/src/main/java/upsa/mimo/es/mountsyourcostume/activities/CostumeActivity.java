@@ -209,7 +209,8 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
       //  Picasso.with(this).load(new File(costume.getUri_image())).centerCrop().into(image);
     //    image.setImageURI(Uri.parse(costume.getUri_image()));
 
-        ViewTreeObserver viewTreeObserver = image.getViewTreeObserver();
+        Picasso.with(CostumeActivity.this).load(new File(costume.getUri_image())).fit().centerCrop().into(image);
+      /*  ViewTreeObserver viewTreeObserver = image.getViewTreeObserver();
         viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
@@ -222,7 +223,7 @@ public class CostumeActivity extends BaseActivity implements DialogConfirmDelete
                 Picasso.with(CostumeActivity.this).load(new File(costume.getUri_image())).resize(width,height).centerCrop().into(image);
                 return true;
             }
-        });
+        });*/
 
     }
 

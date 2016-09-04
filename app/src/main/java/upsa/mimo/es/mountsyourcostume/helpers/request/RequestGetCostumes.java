@@ -9,6 +9,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 
+import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.helpers.CloudDBHelper;
 import upsa.mimo.es.mountsyourcostume.model.CloudSingleton;
 
@@ -59,8 +60,8 @@ public class RequestGetCostumes {
     }
 
     public void requestGetCostumes(){
-       // String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_1 + "/" + MyApplication.getUser().getTokenForBD() + URL_REQUEST_SAVE_COSTUME_2;
-        String url = "http://52.29.230.208:9000/costumes/estoMismo";
+        String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_1 + "/" + MyApplication.getUser().getTokenForBD() + URL_REQUEST_SAVE_COSTUME_2;
+        // String url = "http://52.29.230.208:9000/costumes/estoMismo";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

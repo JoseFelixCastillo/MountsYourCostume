@@ -102,17 +102,17 @@ public class SaveCostumeFragment extends Fragment {
     Spinner spinner;
 
     @OnClick(R.id.floating_button_save_favourites)
-    void FloatingSaveFavourites(){
+    void floatingSaveFavourites(){
         saveInFavourites();
     }
 
     @OnClick(R.id.floating_button_save_cloud)
-    void FloatingSaveCloud(){
+    void floatingSaveCloud(){
         saveInCloud();
     }
 
     @OnClick(R.id.image_view_costume)
-    void ImageViewCostume(){
+    void imageViewCostume(){
         createDialogForPhoto();
     }
 
@@ -248,21 +248,7 @@ public class SaveCostumeFragment extends Fragment {
             Log.d(TAG, "file URI null");
         }
     }
-/*    private boolean checkPermissionCameraAndStorage(){
-        if(Build.VERSION.SDK_INT >=23) {
-            if ((getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
-                    && (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED)) {
-                Log.d(TAG,"permisos entro al primer true");
-                return true;
-            } else {
-                requestPermissions(new String[]{Manifest.permission.CAMERA}, CODE_PERMISSION_CAMERA);
-                return false;
-            }
-        }
-        else{
-            return true;
-            }
-    }*/
+
     private boolean checkPermissionCamera(){
         if(Build.VERSION.SDK_INT >=23) {
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -444,6 +430,7 @@ public class SaveCostumeFragment extends Fragment {
             if(file!=null) {
                 //setFileToActuallyPhotoFile(file);
                 Costume costume = new Costume(name,category,materials,steps,prize,file.getPath());
+               // encodedImage(costume);
               //  costume.setEncodedImage("hola");
               //  long rows = MyApplication.getLocalPersistance().saveCostume(costume);
                 MyApplication.showProgressDialog(getActivity());
@@ -559,18 +546,18 @@ public class SaveCostumeFragment extends Fragment {
 
     //devuelve un archivo del imageView
     private File persistImageFromImageView() throws Exception{
-
         if(imageViewPhoto.getDrawable()!=null) {
-            File file = Utils.createFile(getActivity());
-            OutputStream outputStream;
+           File file = Utils.createFile(getActivity());
+           // OutputStream outputStream;
 
             Bitmap image = ((BitmapDrawable) imageViewPhoto.getDrawable()).getBitmap();
-            outputStream = new FileOutputStream(file);
+
+           /* outputStream = new FileOutputStream(file);
             image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
             outputStream.flush();
-            outputStream.close();
+            outputStream.close();*/
 
-            return file;
+            return Utils.persistImageFromBitmap(file,image);
         }
         return null;
     }

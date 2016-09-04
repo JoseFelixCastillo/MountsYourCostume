@@ -1,6 +1,7 @@
 package upsa.mimo.es.mountsyourcostume.helpers;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -78,10 +79,14 @@ public class VolleyErrorHelper {
 
         if (response != null) {
             switch (response.statusCode) {
+                case 413:
+                    Log.d("VOLLEY", "mirando 413: " + error.networkResponse.toString() + error.getMessage()+ "otro: " +error.networkResponse.headers.values());
+                    return "petición larga";
                 case 400:
                 case 404:
                    try {
                        String dataString = new String(response.data);
+                       Log.d("VOLLEY", "mirando: " + dataString);
                        JSONObject json = new JSONObject(dataString);
                        ResponseGeneral responseGeneral = ResponseGeneral.getFromJson(json);
                        if(responseGeneral.getCode()==ResponseGeneral.USER_NOT_FOUND){
@@ -89,18 +94,6 @@ public class VolleyErrorHelper {
                            return context.getString(R.string.user_not_found);
                        }
                        return responseGeneral.getMessage();
-                      /* switch (responseGeneral.getCode()){
-                           case ResponseGeneral.JSON_MALFORMED_CODE:
-                               return context.getString(R.string.miss_param);
-                           case ResponseGeneral.COSTUME_EXIST:
-                               return context.getString(R.string.costume_exist);
-                           case ResponseGeneral.COSTUME_NOT_FOUND:
-                               return context.getString(R.string.costume_not_found);
-                           case ResponseGeneral.USER_EXIST:
-                               return context.getString(R.string.user_exist);
-                           case ResponseGeneral.USER_NOT_FOUND:
-                               return context.getString(R.string.user_not_found);
-                       }*/
 
 
                     } catch (Exception e) {
@@ -109,6 +102,7 @@ public class VolleyErrorHelper {
                     // invalid request
 
                 default:
+                    Log.d("VOLLEY", "mirando default: " + error.networkResponse.toString() + error.getMessage()+ "otro: " +error.networkResponse.headers.values());
                     return context.getResources().getString(R.string.generic_server_down);
             }
         }

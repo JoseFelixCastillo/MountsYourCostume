@@ -44,10 +44,6 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
     private static final String TWITTER_SECRET = "aOKjp3alg4IhcXtbF4DwILZ8GYQ6fo9gUKMk9Uqvx95TtSE5w6";
 
 
- //   public static final String LOGGIN_NAME = "displayName";
-   // public static final String LOGGIN_EMAIL = "displayEmail";
- //   public static final String LOGGIN_URL_IMAGE = "imageUrl";
-
     public static final String FLAG_LOGGIN = "flagLoggin";
     public static final int FLAG_TWITTER = 1;
     public static final int FLAG_GOGGLEPLUS = 2;
@@ -96,7 +92,6 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
     public void onStart() {
         super.onStart();
 
-      //  Log.d(TAG,"LLEGAMOS AL ONSTART");
         MyApplication.showProgressDialog(this);
         if(!isSignInTwitter()) {
             checkSignInGoogle();

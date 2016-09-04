@@ -1,13 +1,22 @@
 package upsa.mimo.es.mountsyourcostume.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
+import upsa.mimo.es.mountsyourcostume.application.MyApplication;
+import upsa.mimo.es.mountsyourcostume.utils.Utils;
 
 /**
  * Created by JoseFelix on 29/04/2016.
@@ -31,6 +40,7 @@ public class Costume implements Parcelable{
         this.steps = steps;
         this.prize = prize;
         this.uri_image = uri_image;
+        this.encodedImage = encodedImageinBase64(uri_image);
        // this.encodedImage = Base64.encodeToString(new File(), Base64.DEFAULT);
     }
 
@@ -136,15 +146,45 @@ public class Costume implements Parcelable{
         catch(Exception e){
             Log.d("COSTUME", "Error al parsear costume");
         }
-        /*if(costume.getEncodedImage()!=null){
+        if(costume.getEncodedImage()!=null&&costume.getEncodedImage()!="hola"){
 
-            File file = Utils.createFile(context);
-            Base64.decode(costume.getEncodedImage(),0);
+            File file = null;
+            byte[] decodedString = Base64.decode(costume.getEncodedImage(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            try {
+                file = Utils.createFile(context);
+                Utils.persistImageFromBitmap(file,decodedByte);
+            } catch (Exception e) {
+                Log.d("COSTUME", "Error al parsear costume" + e.getMessage());
+                e.printStackTrace();
+            }
 
-        }*/
+            if(file!=null){
+                costume.setImage(file.getPath());
+            }
+            else{
+                Log.d("ERROR", "ERROR AL PASRSEAR LA IMAGEN");
+            }
+
+         //   Base64.decode(costume.getEncodedImage(),0);
+
+        }
+        Log.d("TAG", "ocupa: " + costume.getEncodedImage().getBytes().length);
         return costume;
     }
 
+    private String encodedImageinBase64(String uri_image){
+        Bitmap bm = BitmapFactory.decodeFile(uri_image);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(b,Base64.DEFAULT);
+        Log.d("COSTUME", "ENcoded image: " + encodedImage);
+        Log.d("TAG", "ocupa: " + encodedImage.getBytes().length);
+        return encodedImage;
+       // Utils.persistImageFromBitmap()
+    }
 
 
 

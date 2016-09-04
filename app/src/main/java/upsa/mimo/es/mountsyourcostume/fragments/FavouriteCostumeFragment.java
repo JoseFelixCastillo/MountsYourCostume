@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.activities.CostumeActivity;
 import upsa.mimo.es.mountsyourcostume.adapters.CostumeAdapter;
@@ -30,9 +32,12 @@ public class FavouriteCostumeFragment extends Fragment implements CostumeAdapter
     private final String TAG = "FAVOURITE_COSTUME";
 
    // private SQLiteDatabase db;
-    private RecyclerView recyclerView;
-    private LayoutInflater inflater;
-    private ViewGroup container;
+    @BindView(R.id.recycler_view_favourite)
+    RecyclerView recyclerView;
+
+  //  private LayoutInflater inflater;
+    @BindView(R.id.favourite_container)
+    ViewGroup container;
 
 
 
@@ -61,9 +66,9 @@ public class FavouriteCostumeFragment extends Fragment implements CostumeAdapter
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        this.inflater = inflater;
-        this.container = container;
-        return inflater.inflate(R.layout.fragment_favourite_costume, container, false);
+        View view = inflater.inflate(R.layout.fragment_favourite_costume, container, false);
+        ButterKnife.bind(this,view);
+        return view;
     }
 
     @Override
@@ -71,6 +76,7 @@ public class FavouriteCostumeFragment extends Fragment implements CostumeAdapter
         super.onViewCreated(view, savedInstanceState);
         if(view!=null){
            // loadUI();
+
             setupRecyclerView();
         }
     }
@@ -89,7 +95,7 @@ public class FavouriteCostumeFragment extends Fragment implements CostumeAdapter
 
     private void setupRecyclerView(){
 
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view_favourite);
+       // recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view_favourite);
         recyclerView.setHasFixedSize(true);
         if(getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE){
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
