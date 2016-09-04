@@ -89,7 +89,6 @@ public class MainFragment extends Fragment {
                     return null;
             }
 
-            //return ContentFragment.newInstance(getDataType(position));
         }
 
         @Override public int getCount() {

@@ -47,7 +47,6 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
     //For login with google+
     private GoogleApiClient googleApiClient;
-  //  private static final String IS_DRAWER = "isDrawer";
 
     //For savedInstance
     private String title = "Favourite";
@@ -56,7 +55,6 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
     @BindView(R.id.container)
     ViewGroup container;
 
-
     @BindView(R.id.drawer)
     DrawerLayout drawer;
 
@@ -64,7 +62,6 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
     NavigationView navigationView;
 
     //For drawer layout
-   // private ImageView imageViewNavigationHeader;
     private TextView textViewNavigationHeaderName;
     private TextView textViewNavigationHeaderEmail;
 
@@ -73,7 +70,6 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       // Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -86,12 +82,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
     }
 
     private void loadUI(){
-     //   setListenerToDrawer(drawer);
-
         loadToolBar();
-
-    //    NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-     //   Log.d(TAG, "navigation creado");
 
         if(navigationView!=null) {
             navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -101,20 +92,15 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
                 }
             });
         }
-
-       // loadNavigationHeaderWithIntent();
-
     }
 
     private void initFragmentAndTitle(Bundle savedInstanceState){
-        //MainFragment mainFragment = MainFragment.newInstance();
         if(savedInstanceState==null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             FavouriteCostumeFragment mainFragment = FavouriteCostumeFragment.newInstance();
             ft.replace(R.id.main_frame, mainFragment);
             ft.commit();
-            //setTitle("Favourites");
-            title = "Favourite";
+
         }
         else{
             if(savedInstanceState.getString(KEY_TITLE)!=null){
@@ -124,9 +110,8 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         setTitle(title);
     }
 
-    private void loadNavigationHeaderWithIntent(Intent intent) {
+    private void loadNavigationHeader() {
 
-      //  Log.d(TAG,"LLEGOOO al loadNavigationWithIntent");
         textViewNavigationHeaderName = (TextView) findViewById(R.id.text_view_navigation_header_name);
         textViewNavigationHeaderEmail = (TextView) findViewById(R.id.text_view_navigation_header_email);
 
@@ -135,11 +120,10 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         String name = MyApplication.getUser().getName();
 
         String email = MyApplication.getUser().getTokenForBD();
-       // String email = intent.getStringExtra(LogginActivity.LOGGIN_EMAIL);
+
         String url_image = MyApplication.getUser().getPhotoURL();
 
         this.flagLoggin = MyApplication.getUser().getSocialNetwork();
-
 
         if(name!=null){
             textViewNavigationHeaderName.setText(name);
@@ -187,7 +171,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawer.openDrawer(GravityCompat.START);
-                loadNavigationHeaderWithIntent(getIntent());
+                loadNavigationHeader();
                 return true;
             case R.id.item1:
                 fragment = FavouriteCostumeFragment.newInstance();
@@ -216,8 +200,6 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
         //Se pone primero el setcustomanimation
         fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
         fragmentTransaction.replace(R.id.main_frame,fragment);
-        /// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         setTitle(item.getTitle());
         title= item.getTitle().toString();
@@ -315,64 +297,4 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.OnConn
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-/*        if(drawer.isDrawerOpen(GravityCompat.START)){
-            Log.d(TAG,"cierro drawer");
-          //  drawer.closeDrawers();
-         //   outState.putBoolean(IS_DRAWER,true);
-        }
-        else{
-        //    outState.putBoolean(IS_DRAWER,false);
-        }*/
-
-        outState.putString(KEY_TITLE,title);
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        /*if(savedInstanceState!=null && savedInstanceState.getBoolean(IS_DRAWER)){
-            drawer.openDrawer(GravityCompat.START);
-            loadNavigationHeaderWithIntent(getIntent());
-        }*/
-      //  Log.d(TAG,"onRestore1");
-        super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState!=null){
-
-        }
-/*        if(drawer.isDrawerOpen(GravityCompat.START)){
-            Log.d(TAG,"onRestore2");
-            loadNavigationHeaderWithIntent(getIntent());
-        }*/
-
-    }
-
-    private void setListenerToDrawer(DrawerLayout drawer) {
-        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                Log.d(TAG, "llego al onDrawerSlide");
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-
-                Log.d(TAG, "llego al onDrawerOpened");
-                loadNavigationHeaderWithIntent(getIntent());
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-               Log.d(TAG, "llego al onDrawerClosed");
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                Log.d(TAG, "llego al onDrawerStateChanged");
-            }
-        });
-    }
 }

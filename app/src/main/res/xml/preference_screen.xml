@@ -3,16 +3,8 @@
     <!--<PreferenceCategory android:title="rotation">-->
     <CheckBoxPreference
         android:key="KEY_PREF_SYNC_ROTATION"
-        android:title="Habilitar Rotación de Pantalla"
-        android:summary="Permite habilitar o desactivar la rotacion de pantalla"
+        android:title="@string/settings_screen_rotation_title"
+        android:summary="@string/settings_screen_ration_sumary"
         android:defaultValue="true" />
-  <!--  <ListPreference
-        android:key="KEY_PREF_SYNC_THEME"
-        android:title="Capacidad BD"
-        android:dialogTitle="Capacidad Base Datos"
-        android:entries="@array/theme_options_entries"
-        android:entryValues="@array/theme_optiones_values"
-        android:defaultValue="10"
-         />-->
-    <!--</PreferenceCategory>-->
+
 </PreferenceScreen>

@@ -39,7 +39,7 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     private static final String TAG = LogginActivity.class.getSimpleName();
 
-    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+
     private static final String TWITTER_KEY = "LKxwiScIKLCioDgmqogkCRJAu";
     private static final String TWITTER_SECRET = "aOKjp3alg4IhcXtbF4DwILZ8GYQ6fo9gUKMk9Uqvx95TtSE5w6";
 
@@ -49,15 +49,11 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
     public static final int FLAG_GOGGLEPLUS = 2;
 
     private static final int RC_GOOGLE_SIGN_IN = 9001;
-   // private ProgressDialog mProgressDialog;
-   // private SignInButton buttonGoogleSignIn;
 
     //For google plus
     private GoogleApiClient googleApiClient;
     private GoogleSignInAccount account;
 
-    //For twitter
-  //  private TwitterLoginButton loginButton;
 
     @BindView(R.id.container_activity_lggin)
     ViewGroup container;
@@ -67,7 +63,6 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     @OnClick(R.id.button_google_signin)
     void signInGoogle2(){
-       // Log.d(TAG,"pulsado boton google");
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, RC_GOOGLE_SIGN_IN);
     }
@@ -91,16 +86,12 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
     @Override
     public void onStart() {
         super.onStart();
-
         MyApplication.showProgressDialog(this);
         if(!isSignInTwitter()) {
             checkSignInGoogle();
         }
-
     }
-
     private void initGooglePlus(){
-     //   loadGoogleButton();
 
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
@@ -122,10 +113,8 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
-        //Mostrar dialog con que ha fallado?¿?
         MyApplication.hideProgressDialog();
-      //  Log.d(TAG,"Error en connection failed" + connectionResult.getErrorMessage());
+
         if(connectionResult.getErrorMessage()!=null) {
             MyApplication.showMessageInSnackBar(container, connectionResult.getErrorMessage());
         }
@@ -153,12 +142,10 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     private void checkGoogleSignInResult(GoogleSignInResult signInResult){
 
-     //   Log.d(TAG, "entramos a checkin google");
         if(signInResult.isSuccess()){
-      //      Log.d(TAG, "entramos a checkin google2");
             account = signInResult.getSignInAccount();
             goToMainActivity(FLAG_GOGGLEPLUS);
-         //   goToMainActivityWithGooglePlus();
+
         }
         else{
             MyApplication.hideProgressDialog();
@@ -170,49 +157,19 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
         buttonGoogleSignIn.setScopes(gso.getScopeArray());
     }
 
-  /*  private void goToMainActivityWithGooglePlus(){
-
-     //   Intent profileIntent = new Intent(this, MainActivity.class);
-        if(account.getDisplayName()!=null) {
-            MyApplication.user.setName(account.getDisplayName());
-           // profileIntent.putExtra(LOGGIN_NAME, account.getDisplayName());
-        }
-        if(account.getEmail()!=null) {
-            MyApplication.user.setEmail(account.getEmail());
-      //      profileIntent.putExtra(LOGGIN_EMAIL, account.getEmail());
-            Log.d(TAG, "Google email: " + account.getEmail());
-        }
-        if(account.getPhotoUrl()!=null) {
-            Log.d("PHOTO", account.getPhotoUrl().toString());
-            MyApplication.user.setPhotoURL(account.getPhotoUrl().toString());
-          //  profileIntent.putExtra(LOGGIN_URL_IMAGE, account.getPhotoUrl().toString());
-        }
-        Log.d(TAG, "entramos a vamos al activity main");
-        MyApplication.user.setSocialNetwork(LogginActivity.FLAG_GOGGLEPLUS);
-       // profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, LogginActivity.FLAG_GOGGLEPLUS);
-     //   startActivity(profileIntent);
-       // hideProgressDialog();
-      //  finish();*/
-
- //   }
     //For twitter
     private void initTwitter(){
-     //   loginTwitterButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
         buttonTwitterLogin.setCallback(new Callback<TwitterSession>() {
 
             @Override
             public void success(Result<TwitterSession> result) {
-
-           //     Log.d(TAG, "initTwitterboton quizas");
                 TwitterSession session = result.data;
                 getInfoUserWithTwitter(session);
 
             }
             @Override
             public void failure(TwitterException exception) {
-               // hideProgressDialog();
                 if(!exception.getMessage().contains("request was canceled")){
-              //      Log.d("LOGGIN","Error en Twitter init");
                     MyApplication.showMessageInSnackBar(container,exception.getMessage());
                 }
             }
@@ -220,24 +177,23 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
     }
 
     private void getInfoUserWithTwitter(final TwitterSession session){
-       //  showProgressDialog();
+
         AccountService accountService = Twitter.getApiClient(session).getAccountService();
         accountService.verifyCredentials(true, true, new Callback<User>() {
             @Override
             public void success(final Result<User> result) {
 
-                //Crearlo bien
                 String name = result.data.name;
                 String url_image = result.data.profileImageUrl.replace("_normal","_bigger");
                 String nameId = result.data.screenName;
-                //   String email = result.data.email;
+
                 if (name != null) {
                     MyApplication.getUser().setName(name);
-                  //  profileIntent.putExtra(LogginActivity.LOGGIN_NAME, name);
+
                 }
                 if (url_image != null) {
                     MyApplication.getUser().setPhotoURL(url_image);
-                 //   profileIntent.putExtra(LogginActivity.LOGGIN_URL_IMAGE, url_image);
+
                 }
                 if(nameId !=null){
                     MyApplication.getUser().setTokenForBD(nameId);
@@ -271,7 +227,6 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
             public void failure(TwitterException exception) {
                 MyApplication.hideProgressDialog();
                 if(!exception.getMessage().contains("request was canceled")){
-                //    Log.d("LOGGIN","Error en twitter wiht Twitter");
                     MyApplication.showMessageInSnackBar(container,exception.getMessage());
                 }
 
@@ -299,42 +254,18 @@ public class LogginActivity extends BaseActivity implements GoogleApiClient.OnCo
             GoogleSignInResult result = optPenRes.get();
             checkGoogleSignInResult(result);
         } else {
-           // showProgressDialog();
             optPenRes.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
-                 //   hideProgressDialog();
                     checkGoogleSignInResult(googleSignInResult);
                 }
             });
         }
     }
 
-/*    //For progress dialog
-    private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
-        }
-
-     //   Log.d(TAG, "enseño dialog");
-        mProgressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-       //     Log.d(TAG, "escondo DIalog");
-            mProgressDialog.dismiss();
-        }
-    }*/
-
     private void goToMainActivity(int flag){
 
         Intent profileIntent = new Intent(LogginActivity.this, MainActivity.class);
-
-      //  Log.d(TAG, "iniciando con twitter");
         profileIntent.putExtra(LogginActivity.FLAG_LOGGIN, flag);
         profileIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(profileIntent);

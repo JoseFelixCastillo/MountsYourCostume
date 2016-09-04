@@ -285,37 +285,26 @@ public class SaveCostumeFragment extends Fragment {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Log.d(TAG, "resultCode del captureimage    "+ resultCode);
             if (resultCode == getActivity().RESULT_OK) {
-                // Image captured and saved to fileUri specified in the Intent
-               /* if(data!=null) {
-                    Log.d(TAG, "Image saved to:\n" + data.getData());
-                    Bundle extras = data.getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    imageViewPhoto.setImageBitmap(imageBitmap);
-                }
+
                 //La imagen esta en la memoria cache pero quiero tenerla en memoria normal asi que lo copio en un fichero normal
-*/
+
                 Bitmap imageBitmap = BitmapFactory.decodeFile(actuallyPhotoFile.getPath());
-                Log.d(TAG, "URI camera: "+ actuallyPhotoFile.getPath());
-                //imageViewPhoto.setImageBitmap(imageBitmap);
-               // Picasso.with(getContext()).load(actuallyPhotoFile.getPath()).into(imageViewPhoto);
+
                 setPicToImageView(imageBitmap);
 
             } else if (resultCode == getActivity().RESULT_CANCELED) {
-                Log.d(TAG, "Cancelado en onActivityResult de capture image  ");
+
             } else {
-                // Image capture failed, advise user
-                Log.d(TAG, "Algo raro en onActivityResult de capture image");
+
             }
         }
         if(requestCode == PICK_IMAGE_REQUEST){
-            Log.d(TAG, "entramos a pickimageRequest");
-            if(resultCode == getActivity().RESULT_OK){
 
+            if(resultCode == getActivity().RESULT_OK){
                 if(data!=null){
                     Uri uri = data.getData();
-                    Log.d(TAG, "URI gallery: "+ uri.getPath());
+
                     Bitmap bitmap = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
@@ -324,33 +313,18 @@ public class SaveCostumeFragment extends Fragment {
                     }
                     if(bitmap!=null) {
                         setPicToImageView(bitmap);
-                        //imageViewPhoto.setImageBitmap(bitmap);
+
                     }
                 }
             }
             else if(resultCode == getActivity().RESULT_CANCELED){
-                Log.d(TAG, "Cancelado en onActivityResult de Pick Image");
+
             }
             else{
-                Log.d(TAG, "Algo raro en onActivityResult de Pick Image");
+
             }
         }
-
     }
-
-  /*  private  Uri getOutputMediaFileUri() throws IOException {
-      //  Log.d(TAG, "getOutPutMediFileUri    " + createFile().getAbsolutePath());
-        return Uri.fromFile(createTempFile());
-    }*/
-
-/*    private File createFile() throws IOException {
-
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File outPutDir = getActivity().getCacheDir();
-        return File.createTempFile(timeStamp, ".jpg", outPutDir);
-    }*/
-
     private File createTempFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File tempFile = File.createTempFile(timeStamp, ".jpg", getActivity().getCacheDir());
@@ -362,34 +336,6 @@ public class SaveCostumeFragment extends Fragment {
         actuallyPhotoFile = tempFile;
         return tempFile;
     }
-
-
-
-  /*  private void setPic(String path) {
-        // Get the dimensions of the View
-        int targetW = imageViewPhoto.getWidth();
-        int targetH = imageViewPhoto.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        //Deprecated but in the android guide still in the example
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-        //bitmap.set
-        imageViewPhoto.setImageBitmap(bitmap);
-    }*/
 
     //Change dimension of the image
     private void setPicToImageView(Bitmap immutableBitmap){
@@ -428,11 +374,9 @@ public class SaveCostumeFragment extends Fragment {
                 e.printStackTrace();
             }
             if(file!=null) {
-                //setFileToActuallyPhotoFile(file);
+
                 Costume costume = new Costume(name,category,materials,steps,prize,file.getPath());
-               // encodedImage(costume);
-              //  costume.setEncodedImage("hola");
-              //  long rows = MyApplication.getLocalPersistance().saveCostume(costume);
+
                 MyApplication.showProgressDialog(getActivity());
                 requestSaveCostume(costume);
 
@@ -452,20 +396,17 @@ public class SaveCostumeFragment extends Fragment {
         MyApplication.getCloudPersistance().saveCostume(costume, new RequestSaveCostume.OnResponseSaveCostume() {
             @Override
             public void onResponseSaveCostume(JSONObject response) {
-                Log.d(TAG, "Response de SaveCostume: " + response.toString());
+
                 ResponseGeneral responseGeneral = ResponseGeneral.getFromJson(response);
                 MyApplication.showMessageInSnackBar(container, responseGeneral.getMessage());
-                Log.d(TAG, "Response construido de SaveCostume: " + responseGeneral.getMessage());
+
                 MyApplication.hideProgressDialog();
             }
 
             @Override
             public void onErrorResposeSaveCostume(VolleyError error) {
                 String message = VolleyErrorHelper.getMessage(error,getActivity());
-                if(message==getActivity().getString(R.string.user_not_found)){
-                    requestSaveCostume(costume);
-                }
-                else {
+                if(!(message==getActivity().getString(R.string.user_not_found))){
                     MyApplication.showMessageInSnackBar(container, message);
                     MyApplication.hideProgressDialog();
                 }
@@ -474,8 +415,6 @@ public class SaveCostumeFragment extends Fragment {
     }
 
     private void saveInFavourites(){
-//Ver tambien categoria
-
         if(getFields()&&category!=null){
             File file = null;
             try {
@@ -484,18 +423,14 @@ public class SaveCostumeFragment extends Fragment {
                 e.printStackTrace();
             }
             if(file!=null) {
-                //setFileToActuallyPhotoFile(file);
 
                 Costume costume = new Costume(name,category,materials,steps,prize,file.getPath());
                 long rows = MyApplication.getLocalPersistance().saveCostume(costume);
 
                 if (rows > 0) {
-                    Log.d(TAG, "ha habido inserciones");
                     MyApplication.showMessageInSnackBar(container,getActivity().getString(R.string.save_ok));
-                    /*Snackbar snackbar = Snackbar.make(container, R.string.save_ok,Snackbar.LENGTH_LONG);
-                    snackbar.show();*/
                 } else {
-                    Log.d(TAG, "error insertando posiblemente");
+
                 }
             }
             else{
@@ -506,9 +441,7 @@ public class SaveCostumeFragment extends Fragment {
             MyApplication.showMessageInSnackBar(container,getActivity().getString(R.string.fill_fields));
 
         }
-
     }
-
     private void setFileToActuallyPhotoFile(File persistentFile){
         if(actuallyPhotoFile!=null){
             actuallyPhotoFile.delete();
@@ -521,11 +454,11 @@ public class SaveCostumeFragment extends Fragment {
         String materials = editTextMaterials.getText().toString();
         String steps = editTextSteps.getText().toString();
         String prizeString = editTextPrize.getText().toString();
-        //prize = Integer.parseInt(editTextPrize.getText().toString());
 
 
-        if((name.matches(""))||(materials.matches(""))||(steps.matches(""))||prizeString.matches("")){ //Precio verlo mejor y falta imagen
-          //  showDialog("Rellene todos los campos");
+
+        if((name.matches(""))||(materials.matches(""))||(steps.matches(""))||prizeString.matches("")){
+
             Log.d(TAG,"campos malos");
             return false;
         }
@@ -540,44 +473,20 @@ public class SaveCostumeFragment extends Fragment {
         }
     }
 
-    private void showDialog(String message){
-
-    }
-
     //devuelve un archivo del imageView
     private File persistImageFromImageView() throws Exception{
         if(imageViewPhoto.getDrawable()!=null) {
            File file = Utils.createFile(getActivity());
-           // OutputStream outputStream;
+
 
             Bitmap image = ((BitmapDrawable) imageViewPhoto.getDrawable()).getBitmap();
 
-           /* outputStream = new FileOutputStream(file);
-            image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-            outputStream.flush();
-            outputStream.close();*/
 
             return Utils.persistImageFromBitmap(file,image);
         }
         return null;
     }
 
-   /* private String getRealUriFromUriGallery(Uri uri){
-        String result;
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            result = uri.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-
-        //ContentResolver.op
-        return result;
-
-    }*/
 
     private void createDialogForPhoto(){
 

@@ -3,6 +3,7 @@ package upsa.mimo.es.mountsyourcostume.helpers;
 import android.content.Context;
 
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestCreateUser;
+import upsa.mimo.es.mountsyourcostume.helpers.request.RequestDeleteCostume;
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestGetCostumes;
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestSaveCostume;
 import upsa.mimo.es.mountsyourcostume.interfaces.CloudPersistance;
@@ -67,7 +68,8 @@ public class CloudDBHelper implements CloudPersistance {
     }
 
     @Override
-    public void deleteCostume(String name) {
-
+    public void deleteCostume(String name, RequestDeleteCostume.OnResponseDeleteCostume onResponseDeleteCostume) {
+        RequestDeleteCostume requestDeleteCostume = new RequestDeleteCostume(cloudSingleton,onResponseDeleteCostume,context);
+        requestDeleteCostume.requestDeleteCostume(name);
     }
 }

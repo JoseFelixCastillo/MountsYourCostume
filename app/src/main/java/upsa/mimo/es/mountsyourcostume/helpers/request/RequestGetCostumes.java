@@ -37,7 +37,7 @@ public class RequestGetCostumes {
     }
 
     public void requestGetCostumes(String category){
-         String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_2 + category;
+         String url = CloudDBHelper.URL + URL_REQUEST_SAVE_COSTUME_2 + "/" +category;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override

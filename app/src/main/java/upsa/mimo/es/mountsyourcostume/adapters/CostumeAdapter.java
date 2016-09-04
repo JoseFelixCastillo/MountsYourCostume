@@ -51,7 +51,6 @@ public class CostumeAdapter extends RecyclerView.Adapter<CostumeAdapter.CostumeV
     @Override
     public void onBindViewHolder(CostumeViewHolder holder, int position) {
 
-       // Log.d(TAG,"mostrando costume: " + costumes.get(position).getName());
         holder.bindCostume(costumes.get(position),listener);
     }
 
@@ -74,7 +73,6 @@ public class CostumeAdapter extends RecyclerView.Adapter<CostumeAdapter.CostumeV
 
             imageViewItemViewHolder = (ImageView) itemView.findViewById(R.id.image_costume);
 
-         //   textViewNameItemViewHolder = (TextView) itemView.findViewById(R.id.text_view_name_item_recycler_view);
             textViewCategoryItemViewHolder = (TextView) itemView.findViewById(R.id.text_view_category_item_recicler_view);
 
             this.context = context;
@@ -82,19 +80,10 @@ public class CostumeAdapter extends RecyclerView.Adapter<CostumeAdapter.CostumeV
         }
 
         public void bindCostume(final Costume costume, final OnItemClickListener listener) {
-         //   textViewNameItemViewHolder.setText(costume.getName());
 
             textViewCategoryItemViewHolder.setText(costume.getCategory());
             Picasso.with(context).load(new File(costume.getUri_image())).fit().centerCrop().into(imageViewItemViewHolder);
-           // setImageWithOberserver(costume);
-           // Log.d(TAG, "BIND: width: "+  width + " heigth: " + height);
 
-            //imageViewItemViewHolder.setImageURI(Uri.parse(costume.getUri_image()));
-
-           // Picasso.with(context).load(new File(costume.getUri_image())).fit().centerCrop().into(imageViewItemViewHolder);
-         //   Log.d(TAG, "BIND: width: "+  imageViewItemViewHolder.getWidth() + " heigth: " + imageViewItemViewHolder.getHeight());
-           // Log.d(TAG, "bindeamos en el view holder");
-            //this.costume = costume;
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -102,22 +91,6 @@ public class CostumeAdapter extends RecyclerView.Adapter<CostumeAdapter.CostumeV
                 }
             });
         }
-        //De este forma se reduce el consumo de bytes al colocar fotos
-       /* private void setImageWithOberserver(final Costume costume){
-            ViewTreeObserver viewTreeObserver = imageViewItemViewHolder.getViewTreeObserver();
-            viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    imageViewItemViewHolder.getViewTreeObserver().removeOnPreDrawListener(this);
-                    int width,height;
-                    width = imageViewItemViewHolder.getMeasuredWidth();
-                    height = imageViewItemViewHolder.getMeasuredHeight();
-                  //  Log.d(TAG, "EN OBSERVER: width: "+  width + " heigth: " + height);
 
-                    Picasso.with(context).load(new File(costume.getUri_image())).resize(width,height).centerCrop().into(imageViewItemViewHolder);
-                    return true;
-                }
-            });
-        }*/
     }
 }

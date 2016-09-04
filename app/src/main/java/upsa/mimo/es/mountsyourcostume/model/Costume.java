@@ -3,6 +3,7 @@ package upsa.mimo.es.mountsyourcostume.model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Base64;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
+import upsa.mimo.es.mountsyourcostume.R;
 import upsa.mimo.es.mountsyourcostume.application.MyApplication;
 import upsa.mimo.es.mountsyourcostume.utils.Utils;
 
@@ -40,8 +42,9 @@ public class Costume implements Parcelable{
         this.steps = steps;
         this.prize = prize;
         this.uri_image = uri_image;
-        this.encodedImage = encodedImageinBase64(uri_image);
-       // this.encodedImage = Base64.encodeToString(new File(), Base64.DEFAULT);
+        this.encodedImage="hola";
+      //  this.encodedImage = encodedImageinBase64(uri_image);
+
     }
 
     public String getName() {
@@ -114,6 +117,7 @@ public class Costume implements Parcelable{
         dest.writeString(this.steps);
         dest.writeInt(this.prize);
         dest.writeString(this.uri_image);
+        dest.writeString(this.encodedImage);
     }
 
     protected Costume(Parcel in){
@@ -123,9 +127,9 @@ public class Costume implements Parcelable{
         this.steps = in.readString();
         this.prize = in.readInt();
         this.uri_image = in.readString();
+        this.encodedImage = in.readString();
     }
 
-    //Quizas no se use no lo se, comprobar
     public static final Parcelable.Creator<Costume> CREATOR = new Parcelable.Creator<Costume>() {
         public Costume createFromParcel(Parcel source) {
             return new Costume(source);
@@ -146,7 +150,8 @@ public class Costume implements Parcelable{
         catch(Exception e){
             Log.d("COSTUME", "Error al parsear costume");
         }
-        if(costume.getEncodedImage()!=null&&costume.getEncodedImage()!="hola"){
+        Log.d("COSTUME","MIRANDO COSTUME: " + costume.getEncodedImage());
+        if(costume.getEncodedImage()!=null&&!costume.getEncodedImage().equals("hola")){
 
             File file = null;
             byte[] decodedString = Base64.decode(costume.getEncodedImage(), Base64.DEFAULT);
@@ -155,7 +160,7 @@ public class Costume implements Parcelable{
                 file = Utils.createFile(context);
                 Utils.persistImageFromBitmap(file,decodedByte);
             } catch (Exception e) {
-                Log.d("COSTUME", "Error al parsear costume" + e.getMessage());
+
                 e.printStackTrace();
             }
 
@@ -163,13 +168,15 @@ public class Costume implements Parcelable{
                 costume.setImage(file.getPath());
             }
             else{
-                Log.d("ERROR", "ERROR AL PASRSEAR LA IMAGEN");
+                Log.d("ERROR", "ERROR AL PARSEAR LA IMAGEN");
             }
-
-         //   Base64.decode(costume.getEncodedImage(),0);
-
         }
-        Log.d("TAG", "ocupa: " + costume.getEncodedImage().getBytes().length);
+        else{
+            Log.d("COSTUME","ENTRO ELSE: " + costume.getEncodedImage());
+            Uri uri = Uri.parse("R.drawable.no_photo_available");
+            costume.setImage(uri.getPath());
+        }
+        //Log.d("TAG", "ocupa: " + costume.getEncodedImage().getBytes().length);
         return costume;
     }
 

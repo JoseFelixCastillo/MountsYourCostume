@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import upsa.mimo.es.mountsyourcostume.R;
+
 /**
  * Created by User on 18/07/2016.
  */
@@ -31,8 +33,8 @@ public class DialogConfirmDeleteCostume extends DialogFragment implements Dialog
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("¿Está seguro de borrar el disfraz?")
-                .setTitle("Atención")
+        builder.setMessage(R.string.dialog_delete_costume_message)
+                .setTitle(R.string.attention)
                 .setPositiveButton(android.R.string.ok,this)
         .setNegativeButton(android.R.string.cancel,this);
         return builder.create();
@@ -55,7 +57,7 @@ public class DialogConfirmDeleteCostume extends DialogFragment implements Dialog
             this.listener = (DialogConfirmDeleteCostumeInterface) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " debe de implementar " + DialogConfirmDeleteCostumeInterface.class.getSimpleName());
+                    + activity.getString(R.string.should_implement) + DialogConfirmDeleteCostumeInterface.class.getSimpleName());
         }
 
     }

@@ -136,6 +136,7 @@ public class FavouriteCostumeFragment extends Fragment implements CostumeAdapter
         Intent intent = new Intent(getContext(), CostumeActivity.class);
        // Costume costume = costumesFromSQLite.get(recyclerView.getChildAdapterPosition(v));
         intent.putExtra(CostumeActivity.EXTRA_ITEM, costume);
+        intent.putExtra(CostumeActivity.EXTRA_PERSISTANCE,CostumeActivity.SQLITE);
 
        // View view = inflater.inflate(R.layout.activity_costume,container,false);
         ImageView image = (ImageView) view.findViewById(R.id.image_costume);

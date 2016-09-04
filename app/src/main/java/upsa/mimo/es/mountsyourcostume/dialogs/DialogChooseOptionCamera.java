@@ -33,7 +33,7 @@ public class DialogChooseOptionCamera extends DialogFragment implements DialogIn
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        ListAdapter adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1,
+        ListAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1,
                 getResources().getStringArray(R.array.photo_options));
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(R.string.choose_one_option)

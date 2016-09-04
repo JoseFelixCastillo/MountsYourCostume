@@ -17,13 +17,12 @@
         android:layout_centerInParent="true"/>
 
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:id="@+id/twitter_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_below="@id/button_google_signin"/>
-
-
 
 
 </RelativeLayout>

@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Con esta aplicacion podrás crear tus disfraces y subirlos a la red, ademas podrás descargar los que te gusten y crearlos tu mismo!!"
+        android:text="@string/info"
         android:textSize="25sp"
         android:layout_centerInParent="true"
         />

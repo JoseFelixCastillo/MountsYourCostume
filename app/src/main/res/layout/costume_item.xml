@@ -8,26 +8,26 @@
     
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="@dimen/item_header"
         android:orientation="vertical"
         >
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="@dimen/item_image"
             android:id="@+id/image_costume"
             android:layout_gravity="center_vertical"
-            android:padding="2dp"/>
+            android:padding="@dimen/min_padding"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_view_category_item_recicler_view"
-                android:padding="2dp"
-                android:textSize="15sp"
+                android:padding="@dimen/min_padding"
+                android:textSize="@dimen/text_size_medium"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/margin_medium"
                />
     </LinearLayout>
 

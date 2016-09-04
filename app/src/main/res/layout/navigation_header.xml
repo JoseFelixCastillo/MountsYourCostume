@@ -7,11 +7,11 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_view_navigation_header"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="@dimen/width_circle_photo"
+        android:layout_height="@dimen/height_circle_photo"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/margin_top_circle_photo"
         android:src="@drawable/no_photo_available"
         android:layout_centerInParent="true"
         android:layout_alignParentLeft="true" />
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_view_navigation_header_name"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/tv_margin_top_medium"
         android:layout_below="@id/image_view_navigation_header"
         android:layout_alignLeft="@id/image_view_navigation_header"
         />
@@ -33,18 +33,18 @@
         android:layout_alignLeft="@id/image_view_navigation_header"/>
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/widht_logo"
+        android:layout_height="@dimen/height_logo"
         android:id="@+id/image_view_social_loggin_navigation_header"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/margin_large"
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
 
     <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/margin_large"
+        android:layout_height="@dimen/margin_large"
         android:id="@+id/button_log_out_navigation_header"
         android:src="@drawable/log_out_icon"
         android:onClick="logOut"

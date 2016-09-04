@@ -132,12 +132,12 @@ public class SearchCostumeFragment extends Fragment implements CostumeAdapter.On
         MyApplication.getCloudPersistance().getCostumes(category, new RequestGetCostumes.OnResponseGetCostumes() {
             @Override
             public void onResponseGetCostumes(JSONArray response) {
-                parseCostumes(response);
+                drawList(parseCostumes(response));
             }
 
             @Override
             public void onErrorResposeGetCostumes(VolleyError error) {
-                Log.d(TAG, "Error de SaveCostume: " + error.toString());
+
                 String message = VolleyErrorHelper.getMessage(error,getActivity());
                 MyApplication.showMessageInSnackBar(container, message);
                 MyApplication.hideProgressDialog();
@@ -150,14 +150,12 @@ public class SearchCostumeFragment extends Fragment implements CostumeAdapter.On
         MyApplication.getCloudPersistance().getCostumes(new RequestGetCostumes.OnResponseGetCostumes() {
             @Override
             public void onResponseGetCostumes(JSONArray response) {
-                Log.d(TAG, "Response de SaveCostume: " + response.toString());
                 drawList(parseCostumes(response));
 
             }
 
             @Override
             public void onErrorResposeGetCostumes(VolleyError error) {
-                Log.d(TAG, "Error de SaveCostume: " + error.toString());
                 String message = VolleyErrorHelper.getMessage(error,getActivity());
                 MyApplication.showMessageInSnackBar(container, message);
                 MyApplication.hideProgressDialog();
@@ -182,18 +180,12 @@ public class SearchCostumeFragment extends Fragment implements CostumeAdapter.On
 
     private void drawList(ArrayList<Costume> costumes){
 
-       /* final List<Costume> costumesFromSQLite = getCostumesFromLocalPersistance();
-        if(!costumesFromSQLite.isEmpty()) {
-            final CostumeAdapter costumeAdapter = new CostumeAdapter(costumesFromSQLite, this, getActivity());
-            Log.d(TAG, "pasando a drawlist");
-            recyclerView.setAdapter(costumeAdapter);
-        }*/
         if(costumes.isEmpty()){
 
         }
         else{
             final CostumeAdapter costumeAdapter = new CostumeAdapter(costumes, this, getActivity());
-            Log.d(TAG, "pasando a drawlist");
+
             recyclerView.setAdapter(costumeAdapter);
         }
     }
@@ -213,15 +205,11 @@ public class SearchCostumeFragment extends Fragment implements CostumeAdapter.On
         Intent intent = new Intent(getContext(), CostumeActivity.class);
         // Costume costume = costumesFromSQLite.get(recyclerView.getChildAdapterPosition(v));
         intent.putExtra(CostumeActivity.EXTRA_ITEM, costume);
+        intent.putExtra(CostumeActivity.EXTRA_PERSISTANCE,CostumeActivity.CLOUD);
 
         // View view = inflater.inflate(R.layout.activity_costume,container,false);
         ImageView image = (ImageView) view.findViewById(R.id.image_costume);
-        if(image!=null){
-            Log.d(TAG,"imagen no nula en onclick");
-        }
-        else{
-            Log.d(TAG,"image NULA en onclicck");
-        }
+
 
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 getActivity(),

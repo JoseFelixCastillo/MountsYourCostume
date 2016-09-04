@@ -3,6 +3,7 @@ package upsa.mimo.es.mountsyourcostume.interfaces;
 import java.util.ArrayList;
 
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestCreateUser;
+import upsa.mimo.es.mountsyourcostume.helpers.request.RequestDeleteCostume;
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestGetCostumes;
 import upsa.mimo.es.mountsyourcostume.helpers.request.RequestSaveCostume;
 import upsa.mimo.es.mountsyourcostume.model.Costume;
@@ -16,5 +17,5 @@ public interface CloudPersistance {
     public void getCostumes(String category, RequestGetCostumes.OnResponseGetCostumes onResponseGetCostumes);
     public void getCostumes(RequestGetCostumes.OnResponseGetCostumes onResponseGetCostumes);
     public void saveCostume(Costume costume, RequestSaveCostume.OnResponseSaveCostume onResponseSaveCostume);
-    public void deleteCostume(String name);
+    public void deleteCostume(String name, RequestDeleteCostume.OnResponseDeleteCostume onResponseDeleteCostume);
 }
